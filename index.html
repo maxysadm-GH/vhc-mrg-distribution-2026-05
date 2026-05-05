@@ -979,33 +979,30 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       allDots.push({cx:c[0]+Math.cos(angle)*r, cy:c[1]+Math.sin(angle)*r+(s.locations>=5?4:0), store, stateCode:code});
     });
   });
-  // Position tooltip with reliable viewport-edge avoidance.
-  // Critical: reset to top-left BEFORE measuring, so width isn't cached from a previous clipped render.
+  // Position tooltip via CSS edge anchoring (no measurement needed).
+  // Cursor in right half → anchor tooltip's RIGHT edge (so it grows leftward, never overflows right).
+  // Cursor in bottom half → anchor BOTTOM edge (grows upward).
   function placeTooltip(tt, evt) {
     const tipEl = tt.node();
-    // 1) park at top-left so browser can lay out at its natural max-width (320 per CSS)
-    tipEl.style.right = 'auto';
-    tipEl.style.bottom = 'auto';
-    tipEl.style.left = '0px';
-    tipEl.style.top = '0px';
-    tipEl.style.opacity = '0.001';
-    // 2) force a synchronous reflow to commit the layout
-    void tipEl.offsetWidth;
-    const W = tipEl.offsetWidth || 320;
-    const H = tipEl.offsetHeight || 320;
-    const margin = 16;
-    // 3) default: place down-and-right of cursor
-    let left = evt.clientX + 18;
-    let top = evt.clientY + 14;
-    // 4) if would overflow right edge, flip to LEFT of cursor
-    if (left + W + margin > window.innerWidth) left = evt.clientX - W - 18;
-    if (left < margin) left = margin;
-    // 5) if would overflow bottom edge, flip ABOVE cursor
-    if (top + H + margin > window.innerHeight) top = evt.clientY - H - 14;
-    if (top < margin) top = margin;
-    tipEl.style.left = left + 'px';
-    tipEl.style.top = top + 'px';
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const cx = evt.clientX, cy = evt.clientY;
+    if (cx > vw / 2) {
+      // anchor to right
+      tipEl.style.left = 'auto';
+      tipEl.style.right = Math.max(16, vw - cx + 18) + 'px';
+    } else {
+      tipEl.style.right = 'auto';
+      tipEl.style.left = (cx + 18) + 'px';
+    }
+    if (cy > vh / 2) {
+      tipEl.style.top = 'auto';
+      tipEl.style.bottom = Math.max(16, vh - cy + 14) + 'px';
+    } else {
+      tipEl.style.bottom = 'auto';
+      tipEl.style.top = (cy + 14) + 'px';
+    }
     tipEl.style.opacity = '1';
+    console.log('[placeTooltip]', {cx, cy, vw, vh, mode: cx > vw/2 ? 'right-anchor' : 'left-anchor'});
   }
 
   // Helper: show tooltip near a circle event. Robust to nulls.
