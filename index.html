@@ -503,7 +503,7 @@
   </div>
 
   <div class="reveal r-d6" style="margin-top:32px; padding-top:28px; border-top:1px solid rgba(212,176,106,0.15); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px;">
-    <div style="font-size:11px; letter-spacing:2px; color:var(--ink-soft); text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Period · Jul 2025 – May ’26 · Source · Fishbowl MRP customerId 74 · Audited vs ShipStation/Supabase · Generated May 04, 2026</div>
+    <div style="font-size:11px; letter-spacing:2px; color:var(--ink-soft); text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Period · Jul 2025 – May ’26 · Source · Fishbowl MRP customerId 74 · Audited vs ShipStation/Supabase · Generated May 5, 2026</div>
     <div style="display:flex; align-items:center; gap:12px;">
       <span style="font-size:9px; letter-spacing:2.5px; color:var(--ink-soft); text-transform:uppercase; font-weight:600; font-family:'JetBrains Mono',monospace;">Prepared by</span>
       <span style="font-family:'DM Sans',sans-serif; font-size:15px; letter-spacing:5px; font-weight:700; color:var(--gold-3); line-height:1; text-shadow:0 0 8px var(--gold-glow);">MBACIO</span>
@@ -674,10 +674,13 @@
 <div class="mbacio-footer">
   <div class="mbacio-footer-inner">
     <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; align-items:center;">
-      <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl MRP</span><span class="ds-status">customerId 74</span></div>
-      <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
       <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
-      <div style="margin-left:auto; font-size:10px; color:var(--ink-soft); white-space:nowrap; font-family:'JetBrains Mono',monospace; letter-spacing:1px; text-transform:uppercase;">Generated · May 04, 2026</div>
+      <a class="ds-card" href="data/whsmith_lines.csv" download style="text-decoration:none; cursor:pointer;"><span class="ds-dot amber"></span><span class="ds-name">↓ Lines CSV</span><span class="ds-status">line-level shipments</span></a>
+      <a class="ds-card" href="data/whsmith_orders.csv" download style="text-decoration:none; cursor:pointer;"><span class="ds-dot amber"></span><span class="ds-name">↓ Orders CSV</span><span class="ds-status">order-level</span></a>
+      <a class="ds-card" href="data/ship_to_trends.csv" download style="text-decoration:none; cursor:pointer;"><span class="ds-dot amber"></span><span class="ds-name">↓ Trends CSV</span><span class="ds-status">per-store slope</span></a>
+      <a class="ds-card" href="data/WH-Smith-Distribution-Analysis_2025-07_2026-05.xlsx" download style="text-decoration:none; cursor:pointer;"><span class="ds-dot amber"></span><span class="ds-name">↓ Excel</span><span class="ds-status">7-sheet workbook</span></a>
+      <a class="ds-card" href="data/WH-Smith-Distribution-Summary.md" download style="text-decoration:none; cursor:pointer;"><span class="ds-dot amber"></span><span class="ds-name">↓ Summary</span><span class="ds-status">written read-out</span></a>
+      <div style="margin-left:auto; font-size:10px; color:var(--ink-soft); white-space:nowrap; font-family:'JetBrains Mono',monospace; letter-spacing:1px; text-transform:uppercase;">Generated · May 5, 2026</div>
     </div>
     <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(212,176,106,0.18); padding-top:18px; flex-wrap:wrap; gap:14px;">
       <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
@@ -791,6 +794,13 @@ function pickLabels(data) {
 function lineChart(sel, data, xs, color, areaColor) {
   const w=900, h=340, m={top:46, right:36, bottom:60, left:60};
   const root = d3.select(sel).append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
+  // Floating tooltip layer (one per chart)
+  const tipLayer = d3.select(sel).append('div').attr('class','chart-tip').style('opacity',0)
+    .style('position','absolute').style('pointer-events','none')
+    .style('background','rgba(20,10,20,0.96)').style('border','1px solid var(--gold-3)').style('color','var(--cream)')
+    .style('padding','8px 12px').style('border-radius','6px').style('font-family',"'JetBrains Mono',monospace").style('font-size','12px')
+    .style('box-shadow','0 12px 32px rgba(0,0,0,0.55)').style('z-index','60').style('white-space','nowrap');
+  d3.select(sel).style('position','relative');
   const x = d3.scalePoint().domain(xs).range([m.left, w-m.right]);
   const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.18]).range([h-m.bottom, m.top]);
   const defs = root.append('defs');
@@ -811,8 +821,22 @@ function lineChart(sel, data, xs, color, areaColor) {
   const labelIdxs = new Set(pickLabels(data));
   data.forEach((d,i) => {
     const isKey = labelIdxs.has(i);
-    root.append('circle').attr('class','data-dot').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r', isKey ? 7 : 4).style('fill',color).style('stroke','#0a0508').style('stroke-width', 2)
+    const dotR = isKey ? 7 : 4.5;
+    const dot = root.append('circle').attr('class','data-dot').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r', dotR).style('fill',color).style('stroke','#0a0508').style('stroke-width', 2)
       .style('animation-delay',(1.4 + i*0.05)+'s').style('color',color);
+    // Larger invisible hit-area for hover
+    const hit = root.append('circle').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r', 16).style('fill','transparent').style('cursor','pointer').style('pointer-events','all');
+    hit.node().addEventListener('mouseenter', (evt) => {
+      const containerRect = d3.select(sel).node().getBoundingClientRect();
+      const lbl = xs[i]; const v = Math.round(d).toLocaleString();
+      tipLayer.html(`<strong style="color:${color}; font-family:'Cormorant Garamond',serif; font-size:18px">${v}</strong> <span style="color:var(--cream-dim); font-size:11px; margin-left:6px">${lbl}</span>`)
+        .style('left',(evt.clientX-containerRect.left+10)+'px').style('top',(evt.clientY-containerRect.top-40)+'px').style('opacity',1);
+    });
+    hit.node().addEventListener('mousemove', (evt) => {
+      const containerRect = d3.select(sel).node().getBoundingClientRect();
+      tipLayer.style('left',(evt.clientX-containerRect.left+10)+'px').style('top',(evt.clientY-containerRect.top-40)+'px');
+    });
+    hit.node().addEventListener('mouseleave', () => tipLayer.style('opacity',0));
     if (isKey) {
       root.append('rect').attr('x', x(xs[i])-30).attr('y', y(d)-44).attr('width',60).attr('height',26).attr('rx',13).attr('fill','#1f1320').attr('stroke',color).attr('stroke-width',1.5).style('opacity',0).style('animation','fadeIn .5s ease forwards').style('animation-delay',(1.7+i*0.05)+'s');
       root.append('text').attr('class','point-label').attr('x',x(xs[i])).attr('y',y(d)-26).attr('text-anchor','middle').style('fill',color).style('opacity',0).style('animation','fadeIn .5s ease forwards').style('animation-delay',(1.7+i*0.05)+'s').text(Math.round(d).toLocaleString());
@@ -896,11 +920,13 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       allDots.push({cx:c[0]+Math.cos(angle)*r, cy:c[1]+Math.sin(angle)*r+(s.locations>=5?4:0), store, stateCode:code});
     });
   });
-  // Helper: show tooltip near a circle event (works for mouseenter)
+  // Helper: show tooltip near a circle event. Robust to nulls.
   function showDotTip(evt, d) {
+      if (!d || !d.store) return;
+      console.log('[map-dot-hover]', d.store.name);
       const findKey = Object.keys(DATA.storeInsights).find(k => {
         const s = DATA.storeInsights[k];
-        return s.name === d.store.name && (s.city||'') === (d.store.city||'');
+        return s && s.name === d.store.name && (s.city||'') === (d.store.city||'');
       });
       const ins = findKey ? DATA.storeInsights[findKey] : null;
       const buckColor = d.store.bucket==='Expanding'?'var(--success)':d.store.bucket==='Contracting'?'var(--danger)':'var(--warning)';
@@ -923,12 +949,23 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
         .style('left', (evt.pageX+14)+'px').style('top', (evt.pageY+12)+'px').style('opacity',1);
   }
 
+  // Append dots without transition so r is correct immediately (transitions can interfere with hit-detection on some browsers)
   const dotSel = svg.selectAll('.loc-dot').data(allDots).enter().append('circle')
-    .attr('class', 'loc-dot').attr('cx', d=>d.cx).attr('cy', d=>d.cy).attr('r', 0)
+    .attr('class', 'loc-dot').attr('cx', d=>d.cx).attr('cy', d=>d.cy).attr('r', 7)
     .attr('fill', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a')
-    .style('color', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a');
-  dotSel.on('mouseenter', showDotTip).on('mousemove', showDotTip).on('mouseleave', () => tooltip.style('opacity',0));
-  dotSel.transition().duration(600).delay((_,i)=>1200 + i*16).attr('r', 6);
+    .style('color', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a')
+    .style('pointer-events','all')
+    .style('opacity', 0);
+  dotSel.transition().duration(500).delay((_,i)=>1100 + i*14).style('opacity',1);
+  // Belt + suspenders: bind via d3 AND native addEventListener so we don't depend on d3's event semantics
+  dotSel.each(function(d) {
+    const node = this;
+    node.addEventListener('mouseenter', (evt) => showDotTip(evt, d));
+    node.addEventListener('mousemove', (evt) => showDotTip(evt, d));
+    node.addEventListener('mouseleave', () => tooltip.style('opacity',0));
+    node.addEventListener('touchstart', (evt) => { evt.preventDefault(); showDotTip(evt.touches[0]||evt, d); });
+  });
+  console.log('[map] dots bound:', allDots.length);
   const sortedStates = Object.values(stateData).sort((a,b)=>b.total_qty - a.total_qty);
   // For each state, gather full insights for stores from STORE_INSIGHTS so we can render expansion
   function storesForState(stateCode) {
@@ -953,18 +990,29 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       </div>`;
     }).join('');
     const coldNote = coldCount ? `<div style="margin-top:10px; font-size:11px; color:var(--danger); font-family:'JetBrains Mono',monospace; font-weight:600;">⚠ ${coldCount} cold (60d+ no order)</div>` : '';
+    // Auto-generated insight line based on state metrics
+    const insightLine = (() => {
+      if (expPct >= 80) return `<strong>${s.state} is a growth pocket.</strong> ${s.expanding} of ${s.locations} stores are adding SKU breadth. ${coldCount ? `${coldCount} dormant locations to triage, but` : `Watch as a model market —`} the trajectory is healthy.`;
+      if (expPct <= 30) return `<strong>${s.state} needs attention.</strong> Only ${s.expanding}/${s.locations} expanding · ${s.contracting} contracting${coldCount ? ` · ${coldCount} cold` : ''}. Worth a name-by-name MRG conversation about shelf space and assortment edits.`;
+      if (s.locations >= 10) return `<strong>${s.state} is a major footprint state</strong> with ${s.locations} doors. ${s.expanding} expanding, ${s.contracting} contracting, ${s.flat} flat — mixed performance suggests store-by-store dynamics matter more than state-level read.`;
+      return `<strong>${s.state} mid-trajectory:</strong> ${s.expanding} expanding · ${s.flat} flat · ${s.contracting} contracting · ${coldCount} cold. $${Math.round(totalRev).toLocaleString()} in period revenue across ${s.locations} doors.`;
+    })();
     return `<div class="panel state-card" onclick="this.classList.toggle('open'); this.querySelector('.sc-detail').classList.toggle('open');">
       <div class="panel-spot"></div>
       <div class="sc-h"><div class="sc-code">${s.state}</div><div class="sc-meta">${s.locations} loc · ${s.total_qty.toLocaleString()} u</div></div>
       <div class="sc-buckets"><span style="color:var(--success)">${s.expanding}↑</span><span style="color:var(--warning)">${s.flat}→</span><span style="color:var(--danger)">${s.contracting}↓</span><span style="margin-left:auto; color:${expColor}; font-weight:700">${expPct}% exp</span></div>
       <div class="sc-bar"><div style="background:${expColor}; color:${expColor}; width:0; transition-delay:${idx*0.05}s" data-target-w="${expPct}%"></div></div>
       <div class="sc-detail">
-        <div style="display:flex; justify-content:space-between; font-size:10px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; font-size:10px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:'JetBrains Mono',monospace; margin-bottom:8px; grid-column:1 / -1;">
           <span>Stores in ${s.state}</span>
           <span>$${Math.round(totalRev).toLocaleString()} total</span>
         </div>
         ${storeRows}
         ${coldNote}
+        <div style="grid-column:1 / -1; margin-top:14px; padding:12px 14px; background:rgba(212,176,106,0.08); border-left:3px solid var(--gold-3); border-radius:4px; font-size:12.5px; line-height:1.55; color:var(--cream-dim);">
+          <div style="font-size:9.5px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:'JetBrains Mono',monospace; margin-bottom:4px;">What this means</div>
+          ${insightLine}
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -1076,6 +1124,20 @@ window.toggleStoreRow = function(rowEl) {
   detail.classList.toggle('open');
   rowEl.classList.toggle('expanded');
 };
+// Click-to-expand on per-location cards inside state-blocks (Locations page)
+window.toggleLocCard = function(cardEl) {
+  const wrap = cardEl.parentElement;
+  const detail = wrap.querySelector('.store-detail');
+  if (!detail) return;
+  if (!detail.classList.contains('open') && detail.dataset.loaded === '0') {
+    const key = wrap.dataset.key;
+    const ins = key ? DATA.storeInsights[key] : null;
+    detail.innerHTML = renderStoreDetail(ins);
+    detail.dataset.loaded = '1';
+  }
+  detail.classList.toggle('open');
+  cardEl.classList.toggle('expanded');
+};
 document.querySelectorAll('.lb-row').forEach(el=>io.observe(el));
 });
 
@@ -1113,11 +1175,22 @@ document.getElementById('state-blocks').innerHTML = stateOrdered.map(state => {
     const buck = slope > 0.5 ? 'Expanding' : slope < -0.5 ? 'Contracting' : 'Flat';
     const bcolor = buck==='Expanding' ? '#6ec18a' : buck==='Contracting' ? '#e07a6c' : '#e0b54a';
     const lastVal = vals[vals.length-1] || 0;
-    return `<div class="loc-card" style="--bcolor:${bcolor}">
-      <div class="loc-row"><div class="loc-name">${r.ship_to_name}</div>
-        <span class="loc-bucket" style="background:${bcolor}; color:#0a0508">${buck}</span></div>
-      <div class="loc-meta"><span class="badge">${r.city||'—'}</span><span class="badge">${monthsActive} mo</span><span class="badge">peak ${peak}</span></div>
-      <div class="loc-spark">${sparkSvg(vals, bcolor)}<div class="loc-spark-end" style="--bcolor:${bcolor}; color:${bcolor}">${lastVal}<small>now</small></div></div></div>`;
+    // Look up store insight key for deep-detail expansion
+    const key = Object.keys(DATA.storeInsights).find(k => {
+      const s = DATA.storeInsights[k];
+      return s && s.name === r.ship_to_name && (s.city||'') === (r.city||'');
+    }) || '';
+    const ins = key ? DATA.storeInsights[key] : null;
+    const cold = ins && ins.daysSinceLast >= 60 ? `<span class="sd-status-pill cold" style="margin-left:6px; font-size:8px;">⚠${ins.daysSinceLast}d</span>` : '';
+    return `<div class="loc-card-wrap" data-key="${key}">
+      <div class="loc-card" style="--bcolor:${bcolor}; cursor:pointer;" onclick="toggleLocCard(this)">
+        <div class="loc-row"><div class="loc-name">${r.ship_to_name}${cold}</div>
+          <span class="loc-bucket" style="background:${bcolor}; color:#0a0508">${buck}</span></div>
+        <div class="loc-meta"><span class="badge">${r.city||'—'}</span><span class="badge">${monthsActive} mo</span><span class="badge">peak ${peak}</span></div>
+        <div class="loc-spark">${sparkSvg(vals, bcolor)}<div class="loc-spark-end" style="--bcolor:${bcolor}; color:${bcolor}">${lastVal}<small>now</small></div></div>
+      </div>
+      <div class="store-detail" data-loaded="0"></div>
+    </div>`;
   }).join('');
   return `<section class="state-block"><div class="state-h"><h3>${state}</h3><span class="state-n">${rows.length} location${rows.length===1?'':'s'}</span></div><div class="loc-grid">${cards}</div></section>`;
 }).join('');
