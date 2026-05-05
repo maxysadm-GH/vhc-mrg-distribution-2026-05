@@ -960,7 +960,7 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       tooltip.html(`<strong>${code} · ${s.locations} location${s.locations===1?'':'s'}</strong>
         <span style="color:var(--success);font-weight:600">${s.expanding} expanding</span> · <span style="color:var(--warning);font-weight:600">${s.flat} flat</span> · <span style="color:var(--danger);font-weight:600">${s.contracting} contracting</span>
         <div style="margin-top:6px;color:var(--cream);font-weight:600">${s.total_qty.toLocaleString()} units shipped</div>
-        ${stores}${more}`).style('left', (evt.pageX+14)+'px').style('top', (evt.pageY+12)+'px').style('opacity',1);
+        ${stores}${more}`).style('left', (evt.clientX+14)+'px').style('top', (evt.clientY+12)+'px').style('opacity',1);
     })
     .on('mouseleave', () => tooltip.style('opacity',0))
     .transition().duration(800).delay((_,i)=>i*5).style('opacity', 1);
