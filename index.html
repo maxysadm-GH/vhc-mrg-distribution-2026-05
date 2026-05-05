@@ -248,8 +248,8 @@
   .us-map { width:100%; height:auto; }
   .us-map .state { stroke:#3d2940; stroke-width:0.6; transition:fill .3s, stroke .3s, stroke-width .3s; cursor:pointer; }
   .us-map .state:hover { stroke:var(--gold-3); stroke-width:1.5; filter:drop-shadow(0 0 8px var(--gold-glow)); }
-  .us-map .loc-dot { stroke:#0a0508; stroke-width:1; cursor:pointer; transition:all .25s; transform-origin:center; transform-box:fill-box; filter:drop-shadow(0 0 4px currentColor); }
-  .us-map .loc-dot:hover { stroke-width:2; transform:scale(1.7); }
+  .us-map .loc-dot { stroke:#0a0508; stroke-width:1.2; cursor:pointer; transition:r .2s, stroke-width .2s; pointer-events:all; filter:drop-shadow(0 0 4px currentColor); }
+  .us-map .loc-dot:hover { stroke-width:2.5; }
   .us-map .state-label { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; fill:var(--cream-dim); text-anchor:middle; pointer-events:none; }
   .map-legend { display:flex; gap:14px; align-items:center; margin-top:18px; flex-wrap:wrap; font-size:10px; color:var(--cream-dim); letter-spacing:2px; text-transform:uppercase; font-weight:600; font-family:'JetBrains Mono',monospace; }
   .legend-swatch { display:inline-block; width:22px; height:12px; border-radius:2px; margin-right:6px; vertical-align:middle; border:1px solid rgba(212,176,106,0.20); }
@@ -350,27 +350,46 @@
   .lgd-sw { width:14px; height:14px; border-radius:3px; box-shadow:0 0 6px currentColor; }
   .lgd-pct { color:var(--gold-3); font-variant-numeric:tabular-nums; font-weight:600; font-family:'JetBrains Mono',monospace; }
 
-  /* State cards */
-  .state-card { padding:18px 22px; }
-  .sc-h { display:flex; justify-content:space-between; align-items:baseline; }
+  /* State cards — clickable to expand */
+  .state-card { padding:18px 22px; cursor:pointer; position:relative; }
+  .state-card::after { content:'▾'; position:absolute; top:18px; right:22px; color:var(--gold-3); font-size:14px; opacity:0.5; transition:transform .3s; }
+  .state-card.open::after { transform:rotate(180deg); opacity:1; }
+  .sc-h { display:flex; justify-content:space-between; align-items:baseline; padding-right:24px; }
   .sc-code { font-family:'Cormorant Garamond',serif; font-size:38px; color:var(--gold-3); font-weight:500; line-height:1; text-shadow:0 0 14px var(--gold-glow); }
   .sc-meta { font-size:10px; letter-spacing:1.8px; color:var(--cream-dim); text-transform:uppercase; font-weight:600; font-family:'JetBrains Mono',monospace; }
   .sc-buckets { margin-top:14px; display:flex; gap:10px; font-size:12.5px; font-weight:600; align-items:center; font-family:'JetBrains Mono',monospace; }
   .sc-bar { margin-top:12px; height:5px; background:rgba(212,176,106,0.10); border-radius:3px; overflow:hidden; }
   .sc-bar > div { height:100%; border-radius:3px; transition:width 1.4s cubic-bezier(0.2,0.8,0.2,1); box-shadow:0 0 8px currentColor; }
+  .sc-detail { display:none; margin-top:16px; padding-top:14px; border-top:1px dashed var(--panel-border); }
+  .sc-detail.open { display:block; animation:fadeIn .3s ease; }
+  .sc-store { display:grid; grid-template-columns:auto 1fr auto auto; gap:8px; align-items:center; padding:7px 0; font-size:11.5px; border-bottom:1px dashed rgba(212,176,106,0.10); }
+  .sc-store:last-child { border-bottom:none; }
+  .sc-store-dot { width:7px; height:7px; border-radius:50%; box-shadow:0 0 4px currentColor; }
+  .sc-store-name { color:var(--cream); font-weight:500; line-height:1.3; }
+  .sc-store-q { color:var(--cream-dim); font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; font-size:11px; }
+  .sc-store-r { color:var(--gold-3); font-weight:700; font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; }
+  .sc-cold { background:var(--danger); color:#fff; padding:1px 6px; border-radius:8px; font-size:8.5px; letter-spacing:1px; font-family:'JetBrains Mono',monospace; font-weight:700; margin-left:4px; }
 
-  /* === MBACIO canonical footer (navy #1e3a5f + gold #e8a838) === */
-  .mbacio-footer { background:#1e3a5f; padding:20px 28px 16px; border-top:3px solid #e8a838; margin-top:64px; border-radius:0 0 8px 8px; }
-  .mbacio-footer .ds-card { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10); padding:5px 12px; font-size:11px; border-radius:4px; color:#fff; }
-  .mbacio-footer .ds-dot { width:8px; height:8px; border-radius:50%; background:#6b7280; flex-shrink:0; }
-  .mbacio-footer .ds-dot.green { background:#22c55e; box-shadow:0 0 6px rgba(34,197,94,0.5); }
-  .mbacio-footer .ds-dot.red   { background:#ef4444; box-shadow:0 0 6px rgba(239,68,68,0.5); }
-  .mbacio-footer .ds-dot.amber { background:#f59e0b; }
-  .mbacio-footer .ds-name { font-weight:600; color:rgba(255,255,255,0.85); }
-  .mbacio-footer .ds-status { color:rgba(255,255,255,0.55); font-size:10px; }
-  .mbacio-brand-link:hover img { filter:drop-shadow(0 0 10px rgba(232,168,56,0.7)) drop-shadow(0 0 20px rgba(232,168,56,0.4)); transform:scale(1.03); }
-  .mbacio-footer .social-icon { color:rgba(255,255,255,0.5); transition:color .2s, transform .2s; display:inline-flex; }
-  .mbacio-footer .social-icon:hover { color:#e8a838; transform:scale(1.15); }
+  /* === MBACIO footer — adapted to deck aesthetics, full-bleed === */
+  .mbacio-footer-wrap { width:100%; margin-top:64px; }
+  .mbacio-footer { background:linear-gradient(180deg, rgba(15,8,12,0.85) 0%, rgba(8,4,8,0.95) 100%); padding:28px 8% 22px; border-top:1px solid rgba(232,168,56,0.35); position:relative; backdrop-filter:blur(20px); }
+  .mbacio-footer::before { content:''; position:absolute; top:-1px; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent 0%, #e8a838 25%, #d4b06a 50%, #e8a838 75%, transparent 100%); }
+  .mbacio-footer-inner { max-width:1280px; margin:0 auto; }
+  .mbacio-footer .ds-card { display:flex; align-items:center; gap:7px; background:rgba(212,176,106,0.06); border:1px solid rgba(212,176,106,0.18); padding:6px 14px; font-size:11px; border-radius:5px; color:var(--cream); font-family:'JetBrains Mono',monospace; }
+  .mbacio-footer .ds-dot { width:8px; height:8px; border-radius:50%; background:#5c4060; flex-shrink:0; }
+  .mbacio-footer .ds-dot.green { background:#6ec18a; box-shadow:0 0 6px rgba(110,193,138,0.6); }
+  .mbacio-footer .ds-dot.red   { background:#e07a6c; box-shadow:0 0 6px rgba(224,122,108,0.6); }
+  .mbacio-footer .ds-dot.amber { background:#e0b54a; box-shadow:0 0 6px rgba(224,181,74,0.6); }
+  .mbacio-footer .ds-name { font-weight:600; color:var(--cream); letter-spacing:0.5px; }
+  .mbacio-footer .ds-status { color:var(--ink-soft); font-size:10px; }
+  .mbacio-brand-link { display:inline-block; }
+  .mbacio-brand-link img { height:36px; transition:filter 0.3s, transform 0.3s; filter:brightness(1.05); }
+  .mbacio-brand-link:hover img { filter:drop-shadow(0 0 10px rgba(232,168,56,0.7)) drop-shadow(0 0 20px rgba(232,168,56,0.4)) brightness(1.1); transform:scale(1.04); }
+  .mbacio-footer .social-icon { color:var(--ink-soft); transition:color .2s, transform .2s; display:inline-flex; padding:6px; }
+  .mbacio-footer .social-icon:hover { color:#e8a838; transform:scale(1.18); }
+  .mbacio-footer .tagline { color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.06em; font-size:12px; text-shadow:0 0 12px rgba(232,168,56,0.35); }
+  .mbacio-footer .contact-strip a { color:var(--cream-dim); }
+  .mbacio-footer .contact-strip a:hover { color:#e8a838; }
 
   /* === Mobile (≤ 980px tablet, ≤ 640px phone) === */
   @media (max-width:980px) {
@@ -482,7 +501,7 @@
   </div>
 
   <div class="reveal r-d6" style="margin-top:32px; padding-top:28px; border-top:1px solid rgba(212,176,106,0.15); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px;">
-    <div style="font-size:11px; letter-spacing:2px; color:var(--ink-soft); text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Period · Jul 2025 – May ’26 · Source · Fishbowl ERP customerId 74 · Audited vs ShipStation/Supabase · Generated May 04, 2026</div>
+    <div style="font-size:11px; letter-spacing:2px; color:var(--ink-soft); text-transform:uppercase; font-family:'JetBrains Mono',monospace;">Period · Jul 2025 – May ’26 · Source · Fishbowl MRP customerId 74 · Audited vs ShipStation/Supabase · Generated May 04, 2026</div>
     <div style="display:flex; align-items:center; gap:12px;">
       <span style="font-size:9px; letter-spacing:2.5px; color:var(--ink-soft); text-transform:uppercase; font-weight:600; font-family:'JetBrains Mono',monospace;">Prepared by</span>
       <span style="font-family:'DM Sans',sans-serif; font-size:15px; letter-spacing:5px; font-weight:700; color:var(--gold-3); line-height:1; text-shadow:0 0 8px var(--gold-glow);">MBACIO</span>
@@ -631,8 +650,10 @@
     <div id="top-locations-body"></div>
   </div>
 
-  <div id="state-blocks" class="reveal r-d4"></div>
+  <div id="state-blocks" class="reveal r-d4" style="margin-top:18px;"></div>
 </section>
+<!-- spacing buffer between Locations page and Closing CTA -->
+<div style="height:24px"></div>
 
 <!-- ============ CLOSING ============ -->
 <section class="page" id="close" style="padding:48px 56px 0; max-width:1280px;">
@@ -644,41 +665,41 @@
   </div>
 </section>
 
-<!-- ============ ONE FOOTER · END OF DECK ============ -->
-<div style="max-width:1280px; margin:32px auto 0; padding:0 24px 24px;">
-  <div class="mbacio-footer">
-  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
-  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
-    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
-    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
-    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
-    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
-  </div>
-  <!-- MBACIO Branding -->
-  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
-    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
-        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
-      </a>
-      <div>
-        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
-        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
-          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
-          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
-          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+<!-- ============ ONE FOOTER · END OF DECK · FULL-BLEED ============ -->
+<div class="mbacio-footer-wrap">
+<div class="mbacio-footer">
+  <div class="mbacio-footer-inner">
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; align-items:center;">
+      <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl MRP</span><span class="ds-status">customerId 74</span></div>
+      <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+      <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+      <div style="margin-left:auto; font-size:10px; color:var(--ink-soft); white-space:nowrap; font-family:'JetBrains Mono',monospace; letter-spacing:1px; text-transform:uppercase;">Generated · May 04, 2026</div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(212,176,106,0.18); padding-top:18px; flex-wrap:wrap; gap:14px;">
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+          <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" />
+        </a>
+        <div>
+          <div class="tagline">Powered by SimpleData</div>
+          <div class="contact-strip" style="font-size:11.5px; color:var(--cream-dim); margin-top:3px;">
+            <a href="https://mbacio.com" target="_blank" rel="noopener" style="text-decoration:underline;">www.mbacio.com</a>
+            &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="text-decoration:none;">(773) 657-2300</a>
+            &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="text-decoration:none;">info@mbacio.com</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
-      </a>
-      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-      </a>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -866,12 +887,8 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       allDots.push({cx:c[0]+Math.cos(angle)*r, cy:c[1]+Math.sin(angle)*r+(s.locations>=5?4:0), store, stateCode:code});
     });
   });
-  svg.selectAll('.loc-dot').data(allDots).enter().append('circle')
-    .attr('class', 'loc-dot').attr('cx', d=>d.cx).attr('cy', d=>d.cy).attr('r', 0)
-    .attr('fill', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a')
-    .style('color', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a')
-    .on('mousemove', function(evt,d) {
-      // Find matching store insight by name+city+state+zip key
+  // Helper: show tooltip near a circle event (works for mouseenter)
+  function showDotTip(evt, d) {
       const findKey = Object.keys(DATA.storeInsights).find(k => {
         const s = DATA.storeInsights[k];
         return s.name === d.store.name && (s.city||'') === (d.store.city||'');
@@ -895,17 +912,51 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
         ${cold}
         ${top3 ? '<div style="margin-top:10px; padding-top:8px; border-top:1px dashed rgba(212,176,106,0.18)"><div style="font-size:9.5px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:JetBrains Mono,monospace; margin-bottom:4px">Top SKUs</div>'+top3+'</div>' : ''}`)
         .style('left', (evt.pageX+14)+'px').style('top', (evt.pageY+12)+'px').style('opacity',1);
-    })
-    .on('mouseleave', () => tooltip.style('opacity',0))
-    .transition().duration(600).delay((_,i)=>1200 + i*16).attr('r', 5);
+  }
+
+  const dotSel = svg.selectAll('.loc-dot').data(allDots).enter().append('circle')
+    .attr('class', 'loc-dot').attr('cx', d=>d.cx).attr('cy', d=>d.cy).attr('r', 0)
+    .attr('fill', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a')
+    .style('color', d => d.store.bucket==='Expanding'?'#6ec18a':d.store.bucket==='Contracting'?'#e07a6c':'#e0b54a');
+  dotSel.on('mouseenter', showDotTip).on('mousemove', showDotTip).on('mouseleave', () => tooltip.style('opacity',0));
+  dotSel.transition().duration(600).delay((_,i)=>1200 + i*16).attr('r', 6);
   const sortedStates = Object.values(stateData).sort((a,b)=>b.total_qty - a.total_qty);
+  // For each state, gather full insights for stores from STORE_INSIGHTS so we can render expansion
+  function storesForState(stateCode) {
+    return Object.values(DATA.storeInsights)
+      .filter(ins => ins.state === stateCode)
+      .sort((a,b) => b.totalRev - a.totalRev);
+  }
   document.getElementById('state-cards').innerHTML = sortedStates.map((s, idx) => {
     const expPct = s.locations ? Math.round(100*s.expanding/s.locations) : 0;
     const expColor = expPct >= 70 ? 'var(--success)' : expPct >= 40 ? 'var(--warning)' : 'var(--danger)';
-    return `<div class="panel state-card"><div class="panel-spot"></div>
+    const stores = storesForState(s.state);
+    const totalRev = stores.reduce((a,x)=>a+x.totalRev, 0);
+    const coldCount = stores.filter(x=>x.cold).length;
+    const storeRows = stores.map(x => {
+      const dotColor = x.bucket==='Expanding'?'#6ec18a':x.bucket==='Contracting'?'#e07a6c':'#e0b54a';
+      const coldPill = x.cold ? `<span class="sc-cold">⚠ ${x.daysSinceLast}d</span>` : '';
+      return `<div class="sc-store">
+        <span class="sc-store-dot" style="background:${dotColor}; color:${dotColor}"></span>
+        <span class="sc-store-name">${x.name.slice(0,38)}${coldPill}</span>
+        <span class="sc-store-q">${x.totalQty.toLocaleString()}u</span>
+        <span class="sc-store-r">$${Math.round(x.totalRev).toLocaleString()}</span>
+      </div>`;
+    }).join('');
+    const coldNote = coldCount ? `<div style="margin-top:10px; font-size:11px; color:var(--danger); font-family:'JetBrains Mono',monospace; font-weight:600;">⚠ ${coldCount} cold (60d+ no order)</div>` : '';
+    return `<div class="panel state-card" onclick="this.classList.toggle('open'); this.querySelector('.sc-detail').classList.toggle('open');">
+      <div class="panel-spot"></div>
       <div class="sc-h"><div class="sc-code">${s.state}</div><div class="sc-meta">${s.locations} loc · ${s.total_qty.toLocaleString()} u</div></div>
       <div class="sc-buckets"><span style="color:var(--success)">${s.expanding}↑</span><span style="color:var(--warning)">${s.flat}→</span><span style="color:var(--danger)">${s.contracting}↓</span><span style="margin-left:auto; color:${expColor}; font-weight:700">${expPct}% exp</span></div>
       <div class="sc-bar"><div style="background:${expColor}; color:${expColor}; width:0; transition-delay:${idx*0.05}s" data-target-w="${expPct}%"></div></div>
+      <div class="sc-detail">
+        <div style="display:flex; justify-content:space-between; font-size:10px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:'JetBrains Mono',monospace; margin-bottom:8px;">
+          <span>Stores in ${s.state}</span>
+          <span>$${Math.round(totalRev).toLocaleString()} total</span>
+        </div>
+        ${storeRows}
+        ${coldNote}
+      </div>
     </div>`;
   }).join('');
   setTimeout(()=>{ document.querySelectorAll('.sc-bar > div').forEach(el => { el.style.width = el.dataset.targetW; }); document.querySelectorAll('.state-card').forEach(p=>io.observe(p)); }, 500);
@@ -1102,46 +1153,53 @@ document.getElementById('state-blocks').innerHTML = stateOrdered.map(state => {
   document.getElementById('conc-list').innerHTML = html;
 })();
 
-document.getElementById('recon-body').innerHTML = (DATA.monthlyAlignment||[]).map(r => {
-  const dCls = r.delta > 0 ? 'delta-pos' : r.delta < 0 ? 'delta-neg' : 'delta-zero';
-  const sign = r.delta > 0 ? '+' : '';
-  return `<tr><td>${r.ym}</td><td style="text-align:right">${r.fb_so}</td><td style="text-align:right">${r.ss_ship}</td><td class="${dCls}" style="text-align:right">${sign}${r.delta}</td></tr>`;
-}).join('');
-
-const carrierEntries = Object.entries(DATA.carrierDist);
-const cMax = Math.max(...carrierEntries.map(([_,v])=>v));
-document.getElementById('carrier-mix').innerHTML = carrierEntries.map(([name,n]) => `
-  <div style="margin-bottom:13px">
-    <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px; font-weight:500; font-family:'JetBrains Mono',monospace;">
-      <span style="color:var(--cream)">${name}</span><span style="color:var(--gold-3); font-variant-numeric:tabular-nums">${n}</span>
-    </div>
-    <div style="height:6px; background:rgba(212,176,106,0.10); border-radius:3px; overflow:hidden">
-      <div style="height:100%; width:${(n/cMax)*100}%; background:linear-gradient(90deg, var(--gold-2) 0%, var(--gold-3) 100%); border-radius:3px; box-shadow:0 0 6px var(--gold-glow)"></div>
-    </div>
-  </div>`).join('');
-
-const skuDescs = {}; DATA.skuMaster.forEach(s=>skuDescs[s.sku]=s.description);
-const penByMonth = {};
-DATA.skuPenetration.forEach(p => { (penByMonth[p.sku] = penByMonth[p.sku]||{})[p.ym] = p.pct; });
-document.getElementById('pen-month-headers').innerHTML = DATA.months.map((m,i)=>`<th>${DATA.monthLabels[i]}</th>`).join('');
-document.getElementById('pen-body').innerHTML = DATA.skuMaster.map(s=>s.sku).map(s => {
-  const cells = DATA.months.map(m => {
-    const v = penByMonth[s]?.[m] || 0;
-    let bg='#140a14', tx='#3d2940';
-    if (v>=70) { bg='#3d7a52'; tx='#ffffff'; }      // strong green for high penetration
-    else if (v>=40) { bg='#c08a2c'; tx='#0a0508'; }  // amber for mid
-    else if (v>=15) { bg='#5c4060'; tx='#f5ebd9'; }  // purple for low
-    else if (v>0) { bg='#2a1c2e'; tx='#cfb988'; }    // dim for very low
-    return `<td style="background:${bg};color:${tx}">${Math.round(v)}%</td>`;
+// Audit-page elements (recon, carrier, penetration, donut) live in audit-internal.html only.
+// In the main deck their containers don't exist — guard each render so the script doesn't die.
+[['recon-body','#recon-body'],['carrier-mix','#carrier-mix'],['pen-body','#pen-body'],['donut','#donut']]
+  .forEach(([id]) => { /* no-op; wrapped below */ });
+if (document.getElementById('recon-body')) {
+  document.getElementById('recon-body').innerHTML = (DATA.monthlyAlignment||[]).map(r => {
+    const dCls = r.delta > 0 ? 'delta-pos' : r.delta < 0 ? 'delta-neg' : 'delta-zero';
+    const sign = r.delta > 0 ? '+' : '';
+    return `<tr><td>${r.ym}</td><td style="text-align:right">${r.fb_so}</td><td style="text-align:right">${r.ss_ship}</td><td class="${dCls}" style="text-align:right">${sign}${r.delta}</td></tr>`;
   }).join('');
-  const label = (skuDescs[s]||s).split(',')[0].split(' - ').slice(-1)[0].slice(0,40);
-  return `<tr><td class="sku-cell"><strong>${s}</strong><br><span class="sku-name">${label}</span></td>${cells}</tr>`;
-}).join('');
-
-(function(){
+}
+if (document.getElementById('carrier-mix')) {
+  const carrierEntries = Object.entries(DATA.carrierDist);
+  const cMax = Math.max(...carrierEntries.map(([_,v])=>v));
+  document.getElementById('carrier-mix').innerHTML = carrierEntries.map(([name,n]) => `
+    <div style="margin-bottom:13px">
+      <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px; font-weight:500; font-family:'JetBrains Mono',monospace;">
+        <span style="color:var(--cream)">${name}</span><span style="color:var(--gold-3); font-variant-numeric:tabular-nums">${n}</span>
+      </div>
+      <div style="height:6px; background:rgba(212,176,106,0.10); border-radius:3px; overflow:hidden">
+        <div style="height:100%; width:${(n/cMax)*100}%; background:linear-gradient(90deg, var(--gold-2) 0%, var(--gold-3) 100%); border-radius:3px; box-shadow:0 0 6px var(--gold-glow)"></div>
+      </div>
+    </div>`).join('');
+}
+if (document.getElementById('pen-body')) {
+  const skuDescs = {}; DATA.skuMaster.forEach(s=>skuDescs[s.sku]=s.description);
+  const penByMonth = {};
+  DATA.skuPenetration.forEach(p => { (penByMonth[p.sku] = penByMonth[p.sku]||{})[p.ym] = p.pct; });
+  if (document.getElementById('pen-month-headers'))
+    document.getElementById('pen-month-headers').innerHTML = DATA.months.map((m,i)=>`<th>${DATA.monthLabels[i]}</th>`).join('');
+  document.getElementById('pen-body').innerHTML = DATA.skuMaster.map(s=>s.sku).map(s => {
+    const cells = DATA.months.map(m => {
+      const v = penByMonth[s]?.[m] || 0;
+      let bg='#140a14', tx='#3d2940';
+      if (v>=70) { bg='#3d7a52'; tx='#ffffff'; }
+      else if (v>=40) { bg='#c08a2c'; tx='#0a0508'; }
+      else if (v>=15) { bg='#5c4060'; tx='#f5ebd9'; }
+      else if (v>0) { bg='#2a1c2e'; tx='#cfb988'; }
+      return `<td style="background:${bg};color:${tx}">${Math.round(v)}%</td>`;
+    }).join('');
+    const label = (skuDescs[s]||s).split(',')[0].split(' - ').slice(-1)[0].slice(0,40);
+    return `<tr><td class="sku-cell"><strong>${s}</strong><br><span class="sku-name">${label}</span></td>${cells}</tr>`;
+  }).join('');
+}
+if (document.getElementById('donut')) {
   const total = DATA.skuMaster.reduce((a,s)=>a+s.qty,0);
   const w=300, h=300, ir=66, oR=132; const cx=w/2, cy=h/2;
-  // Distinct hues per SKU — not all gold variations
   const palette=['#d4877c','#7cb88f','#e0b54a','#a0466b','#8c6342','#d4905a','#e6dcc4'];
   let a=-Math.PI/2;
   const segments = DATA.skuMaster.map((s,i) => {
@@ -1152,13 +1210,13 @@ document.getElementById('pen-body').innerHTML = DATA.skuMaster.map(s=>s.sku).map
     const x3=cx+ir*Math.cos(a2), y3=cy+ir*Math.sin(a2);
     const x4=cx+ir*Math.cos(a), y4=cy+ir*Math.sin(a);
     const d=`M${x1.toFixed(1)},${y1.toFixed(1)} A${oR},${oR} 0 ${large} 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${x3.toFixed(1)},${y3.toFixed(1)} A${ir},${ir} 0 ${large} 0 ${x4.toFixed(1)},${y4.toFixed(1)} Z`;
-    const out = {d, color:palette[i%palette.length], pct, label:(s.description||'').split(' - ').slice(-1)[0].split(',')[0].slice(0,30)};
-    a = a2; return out;
+    a = a2; return {d, color:palette[i%palette.length], pct, label:(s.description||'').split(' - ').slice(-1)[0].split(',')[0].slice(0,30)};
   });
   const paths = segments.map((s,i)=>`<path d="${s.d}" fill="${s.color}" stroke="#0a0508" stroke-width="2" style="opacity:0; animation:fadeIn .8s ease forwards; animation-delay:${0.4 + i*0.1}s; filter:drop-shadow(0 0 8px ${s.color}55)"/>`).join('');
   document.getElementById('donut').innerHTML = `<svg viewBox="0 0 ${w} ${h}" style="width:240px;height:240px">${paths}<text x="${cx}" y="${cy-2}" text-anchor="middle" fill="#f5ebd9" font-family="Cormorant Garamond" font-size="38" font-weight="500">${total.toLocaleString()}</text><text x="${cx}" y="${cy+20}" text-anchor="middle" fill="#d4b06a" font-family="JetBrains Mono" font-size="11" letter-spacing="2" font-weight="700">UNITS</text></svg>`;
-  document.getElementById('donut-legend').innerHTML = segments.map(s => `<div class="lgd-row"><span class="lgd-sw" style="background:${s.color}; color:${s.color}"></span><span>${s.label}</span><span class="lgd-pct">${(s.pct*100).toFixed(0)}%</span></div>`).join('');
-})();
+  if (document.getElementById('donut-legend'))
+    document.getElementById('donut-legend').innerHTML = segments.map(s => `<div class="lgd-row"><span class="lgd-sw" style="background:${s.color}; color:${s.color}"></span><span>${s.label}</span><span class="lgd-pct">${(s.pct*100).toFixed(0)}%</span></div>`).join('');
+}
 
 // REVENUE page renderers
 (function() {
