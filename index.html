@@ -59,6 +59,51 @@
   body.light .map-tooltip { background:#ffffff; color:var(--cream); border-color:var(--gold-3); box-shadow:0 12px 32px rgba(31,20,24,0.20); }
   body.light .map-tooltip strong { color:var(--gold-2); }
 
+  /* === LIGHT-MODE ANIMATION & HOVER PARITY === */
+  /* Cover cursor glow — switch from screen-blend to multiply so it's visible on cream */
+  body.light .cursor-glow { background:radial-gradient(circle, rgba(160,122,58,0.45) 0%, rgba(197,160,89,0.18) 30%, transparent 65%); mix-blend-mode:multiply; }
+  body.light .cover:hover .cursor-glow { opacity:0.85; }
+  /* Panel cursor spotlight — visible warm amber on white */
+  body.light .panel .panel-spot { background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(160,122,58,0.15), transparent 50%); }
+  /* Map state hover — gold border in light mode */
+  body.light .us-map .state { stroke:#d9c7a8; stroke-width:0.7; }
+  body.light .us-map .state:hover { stroke:#7a5c2a; stroke-width:1.6; filter:drop-shadow(0 0 6px rgba(160,122,58,0.4)); }
+  body.light .us-map { background:#fefdfa; }
+  body.light .us-map .state-label { fill:#3d2c30; }
+  body.light .us-map .loc-dot { stroke:#1f1418; }
+  /* Chart axes / labels */
+  body.light .chart-svg .axis-line { stroke:rgba(122,92,42,0.22); }
+  body.light .chart-svg .axis-text { fill:#3d2c30; }
+  body.light .chart-svg .axis-text-y { fill:#6b5256; }
+  body.light .chart-svg .point-label, body.light .chart-svg .bar-value { filter:drop-shadow(0 1px 1px rgba(255,255,255,0.6)); }
+  body.light .chart-svg .data-line { filter:none; }
+  body.light .chart-svg .data-dot { filter:none; stroke:#fefdfa; }
+  /* Chart hover tooltips */
+  body.light .chart-tip { background:#ffffff !important; color:#1f1418 !important; box-shadow:0 12px 32px rgba(31,20,24,0.18) !important; }
+  /* Buckets / churn cells / state cards / loc cards — keep transforms, swap shadow */
+  body.light .bucket:hover { box-shadow:0 12px 28px rgba(31,20,24,0.12); }
+  body.light .churn-cell:hover { box-shadow:0 8px 20px rgba(31,20,24,0.10); }
+  body.light .state-card { background:#ffffff; }
+  body.light .state-card:hover { box-shadow:0 12px 32px rgba(31,20,24,0.14); border-color:#a07a3a; }
+  body.light .loc-card { background:#ffffff; }
+  body.light .loc-card:hover { box-shadow:0 8px 20px rgba(31,20,24,0.12); border-color:#cfb988; }
+  body.light .lb-row:hover { background:rgba(160,122,58,0.08); }
+  body.light .insight:hover { box-shadow:0 16px 32px rgba(31,20,24,0.12); border-color:#a07a3a; }
+  /* Number glow on stats: use color shadow visible on cream */
+  body.light .stat-v { filter:drop-shadow(0 0 12px rgba(197,160,89,0.25)); }
+  body.light .lb-rank.r1 { text-shadow:0 0 10px rgba(197,160,89,0.4); }
+  body.light .insight-num { text-shadow:none; color:#a07a3a; }
+  body.light .sc-code { text-shadow:0 0 8px rgba(197,160,89,0.30); }
+  body.light .loc-spark-end { text-shadow:none; }
+  /* Background mesh stays animated (same drift) but with warmer tones */
+  body.light .bg-mesh { animation:meshDrift 28s ease-in-out infinite alternate; }
+  /* MBACIO footer stays dark for brand consistency in either theme */
+  body.light .mbacio-footer { background:linear-gradient(180deg, rgba(15,8,12,0.95) 0%, rgba(8,4,8,0.98) 100%); }
+  body.light .mbacio-footer .ds-card { color:#f5ebd9; }
+  /* Theme button hover */
+  body.light .theme-btn { border-color:#cfb988; color:#7a5c2a; }
+  body.light .theme-btn:hover { background:rgba(160,122,58,0.10); border-color:#7a5c2a; }
+
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { background:var(--bg-0); color:var(--cream); font-family:'DM Sans',sans-serif; font-weight:400; -webkit-font-smoothing:antialiased; scroll-behavior:smooth; overflow-x:hidden; }
   ::selection { background:var(--gold-glow); color:var(--bg-0); }
