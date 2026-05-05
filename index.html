@@ -979,21 +979,33 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       allDots.push({cx:c[0]+Math.cos(angle)*r, cy:c[1]+Math.sin(angle)*r+(s.locations>=5?4:0), store, stateCode:code});
     });
   });
-  // Position tooltip near cursor with viewport-edge avoidance
+  // Position tooltip with reliable viewport-edge avoidance.
+  // Critical: reset to top-left BEFORE measuring, so width isn't cached from a previous clipped render.
   function placeTooltip(tt, evt) {
     const tipEl = tt.node();
-    // Force layout so we get accurate dimensions
+    // 1) park at top-left so browser can lay out at its natural max-width (320 per CSS)
+    tipEl.style.right = 'auto';
+    tipEl.style.bottom = 'auto';
+    tipEl.style.left = '0px';
+    tipEl.style.top = '0px';
     tipEl.style.opacity = '0.001';
-    const rect = tipEl.getBoundingClientRect();
-    const w = rect.width || 320, h = rect.height || 200;
+    // 2) force a synchronous reflow to commit the layout
+    void tipEl.offsetWidth;
+    const W = tipEl.offsetWidth || 320;
+    const H = tipEl.offsetHeight || 320;
     const margin = 16;
+    // 3) default: place down-and-right of cursor
     let left = evt.clientX + 18;
     let top = evt.clientY + 14;
-    if (left + w + margin > window.innerWidth) left = evt.clientX - w - 18;
+    // 4) if would overflow right edge, flip to LEFT of cursor
+    if (left + W + margin > window.innerWidth) left = evt.clientX - W - 18;
     if (left < margin) left = margin;
-    if (top + h + margin > window.innerHeight) top = evt.clientY - h - 14;
+    // 5) if would overflow bottom edge, flip ABOVE cursor
+    if (top + H + margin > window.innerHeight) top = evt.clientY - H - 14;
     if (top < margin) top = margin;
-    tt.style('left', left+'px').style('top', top+'px').style('opacity', 1);
+    tipEl.style.left = left + 'px';
+    tipEl.style.top = top + 'px';
+    tipEl.style.opacity = '1';
   }
 
   // Helper: show tooltip near a circle event. Robust to nulls.
