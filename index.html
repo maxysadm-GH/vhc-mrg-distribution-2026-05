@@ -75,9 +75,9 @@
   @keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
   .stat .l { font-size:11px; letter-spacing:2px; color:#c5a059; text-transform:uppercase; margin-top:10px; line-height:1.5; font-weight:600; }
 
-  /* CONTENT panels */
-  .panel { background:var(--paper-card); border:1px solid var(--rule); border-radius:8px; padding:28px; box-shadow:0 1px 3px rgba(122,92,42,0.06); transition:box-shadow .3s, transform .3s; }
-  .panel:hover { box-shadow:0 6px 20px rgba(122,92,42,0.10); }
+  /* CONTENT panels — stronger lift, crisp boundaries */
+  .panel { background:#ffffff; border:1px solid #e8dcc1; border-radius:10px; padding:32px; box-shadow:0 4px 16px rgba(31,20,24,0.06), 0 1px 2px rgba(31,20,24,0.04); transition:box-shadow .3s, transform .3s; }
+  .panel:hover { box-shadow:0 12px 32px rgba(31,20,24,0.10), 0 2px 4px rgba(31,20,24,0.06); transform:translateY(-2px); }
   .panel-h { font-size:13px; letter-spacing:2.5px; color:var(--gold-deep); text-transform:uppercase; margin-bottom:20px; font-weight:700; }
   .panel-band { background:var(--paper-2); border:1px solid var(--rule); border-radius:8px; padding:28px; }
   .grid-2 { display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:start; }
@@ -585,76 +585,88 @@ function animateCountup(el) {
 }
 
 // ====== Charts ======
+// Returns the indexes of values worth labeling: first, last, max, min (deduped)
+function pickLabels(data) {
+  const n = data.length; if (n<=4) return data.map((_,i)=>i);
+  const max = data.indexOf(Math.max(...data));
+  const min = data.indexOf(Math.min(...data));
+  return [...new Set([0, max, min, n-1])].sort((a,b)=>a-b);
+}
+
 function lineChart(sel, data, xs, color, areaColor) {
-  // Larger viewBox, larger margins, larger fonts — labels read at any container size
-  const w=900, h=420, m={top:30, right:30, bottom:64, left:70};
+  // Generous top margin, sparse labels = enterprise polish
+  const w=900, h=440, m={top:60, right:40, bottom:72, left:78};
   const root = d3.select(sel).append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
   const x = d3.scalePoint().domain(xs).range([m.left, w-m.right]);
-  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.12]).range([h-m.bottom, m.top]);
+  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.18]).range([h-m.bottom, m.top]);
   const defs = root.append('defs');
   const grad = defs.append('linearGradient').attr('id', 'a-'+sel.slice(1)).attr('x1','0').attr('x2','0').attr('y1','0').attr('y2','1');
-  grad.append('stop').attr('offset','0%').attr('stop-color',areaColor||color).attr('stop-opacity',0.36);
+  grad.append('stop').attr('offset','0%').attr('stop-color',areaColor||color).attr('stop-opacity',0.28);
   grad.append('stop').attr('offset','100%').attr('stop-color',areaColor||color).attr('stop-opacity',0);
-  [0,0.25,0.5,0.75,1].forEach(f => {
+  // sparse grid: only top + bottom + middle
+  [0, 0.5, 1].forEach(f => {
     const yy = m.top + (h-m.top-m.bottom)*(1-f);
     root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
-    root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+5).attr('text-anchor','end').text(Math.round(mx*f));
+    root.append('text').attr('class','axis-text-y').attr('x',m.left-14).attr('y',yy+6).attr('text-anchor','end').text(Math.round(mx*f).toLocaleString());
   });
-  xs.forEach((lbl,i) => { if (xs.length<=12 || i%2===0) root.append('text').attr('class','axis-text').attr('x',x(lbl)).attr('y',h-m.bottom+26).attr('text-anchor','middle').text(lbl); });
+  // x-axis: every other label
+  xs.forEach((lbl,i) => { if (i%2===0) root.append('text').attr('class','axis-text').attr('x',x(lbl)).attr('y',h-m.bottom+30).attr('text-anchor','middle').text(lbl); });
   const line = d3.line().x((_,i)=>x(xs[i])).y(d=>y(d)).curve(d3.curveMonotoneX);
   const area = d3.area().x((_,i)=>x(xs[i])).y0(h-m.bottom).y1(d=>y(d)).curve(d3.curveMonotoneX);
   root.append('path').attr('class','data-area').attr('d',area(data)).attr('fill','url(#a-'+sel.slice(1)+')');
-  const path = root.append('path').attr('class','data-line').attr('d',line(data)).style('stroke',color);
+  const path = root.append('path').attr('class','data-line').attr('d',line(data)).style('stroke',color).style('stroke-width',3);
   const len = path.node().getTotalLength(); path.style('stroke-dasharray', len).style('stroke-dashoffset', len);
+  // dots on every point (light), labels only on key points
+  const labelIdxs = new Set(pickLabels(data));
   data.forEach((d,i) => {
-    root.append('circle').attr('class','data-dot').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r',7).style('fill',color).style('stroke','#fefdfa').style('stroke-width',2.5)
+    const isKey = labelIdxs.has(i);
+    root.append('circle').attr('class','data-dot').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r', isKey ? 8 : 4.5).style('fill',color).style('stroke','#ffffff').style('stroke-width', isKey ? 3 : 2)
       .style('animation-delay',(1.4 + i*0.05)+'s');
-    root.append('text').attr('class','point-label').attr('x',x(xs[i])).attr('y',y(d)-18).attr('text-anchor','middle').text(Math.round(d));
+    if (isKey) {
+      // pill label well above dot, with cream background for readability
+      root.append('rect').attr('x', x(xs[i])-26).attr('y', y(d)-46).attr('width',52).attr('height',26).attr('rx',13).attr('fill','#ffffff').attr('stroke',color).attr('stroke-width',1.5).style('opacity',0).style('animation','fadeIn .5s ease forwards').style('animation-delay',(1.7+i*0.05)+'s');
+      root.append('text').attr('class','point-label').attr('x',x(xs[i])).attr('y',y(d)-28).attr('text-anchor','middle').style('fill',color).style('opacity',0).style('animation','fadeIn .5s ease forwards').style('animation-delay',(1.7+i*0.05)+'s').text(Math.round(d).toLocaleString());
+    }
   });
 }
-function barChart(sel, data, xs, color) {
-  const w=900, h=400, m={top:34, right:30, bottom:64, left:70};
+function barChart(sel, data, xs, color, valuePrefix) {
+  valuePrefix = valuePrefix || '';
+  const w=900, h=420, m={top:50, right:36, bottom:72, left:90};
   const root = d3.select(sel).append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
-  const x = d3.scaleBand().domain(xs).range([m.left, w-m.right]).padding(0.28);
-  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.14]).range([h-m.bottom, m.top]);
-  [0.25,0.5,0.75,1].forEach(f => {
+  const x = d3.scaleBand().domain(xs).range([m.left, w-m.right]).padding(0.34);
+  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.18]).range([h-m.bottom, m.top]);
+  // gradient bar fill
+  const defs = root.append('defs');
+  const grad = defs.append('linearGradient').attr('id','b-'+sel.slice(1)).attr('x1','0').attr('x2','0').attr('y1','0').attr('y2','1');
+  grad.append('stop').attr('offset','0%').attr('stop-color',color).attr('stop-opacity',0.95);
+  grad.append('stop').attr('offset','100%').attr('stop-color',color).attr('stop-opacity',0.65);
+  [0, 0.5, 1].forEach(f => {
     const yy = m.top + (h-m.top-m.bottom)*(1-f);
     root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
-    root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+5).attr('text-anchor','end').text(Math.round(mx*f).toLocaleString());
+    root.append('text').attr('class','axis-text-y').attr('x',m.left-14).attr('y',yy+6).attr('text-anchor','end').text(valuePrefix+Math.round(mx*f).toLocaleString());
   });
+  // Only label key bars to reduce clutter
+  const labelIdxs = new Set(pickLabels(data));
   data.forEach((d,i) => {
     const bx = x(xs[i]); const bw = x.bandwidth();
     const by = y(d); const bh = (h-m.bottom) - by;
-    root.append('rect').attr('class','bar').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill',color).attr('rx',4).style('animation-delay',(0.2 + i*0.06)+'s');
-    if (xs.length<=12 || i%2===0) root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+26).attr('text-anchor','middle').text(xs[i]);
-    root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-10).attr('text-anchor','middle').text(Math.round(d).toLocaleString());
+    root.append('rect').attr('class','bar').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill','url(#b-'+sel.slice(1)+')').attr('rx',4).style('animation-delay',(0.2 + i*0.06)+'s');
+    if (i%2===0 || i===xs.length-1) root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+30).attr('text-anchor','middle').text(xs[i]);
+    if (labelIdxs.has(i)) {
+      // value label well-clear of bar top
+      root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-16).attr('text-anchor','middle').style('fill',color).text(valuePrefix+Math.round(d).toLocaleString());
+    }
   });
 }
 lineChart('#chart-active', DATA.activeShipTos, DATA.monthLabels, '#a07a3a', '#c5a059');
 barChart('#chart-qty', DATA.qty, DATA.monthLabels, '#7a5c2a');
-barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newShipTosPerMonth.map(d=>d.ym.slice(5)), '#3d7a52');
+barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newShipTosPerMonth.map(d=>d.ym.slice(2,7).replace('-','/')), '#3d7a52');
 
 // ====== REVENUE page rendering (no margin/cost data) ======
 (function() {
   const monthly = DATA.cfo.monthly;
-  const xs = monthly.map(m => m.ym.slice(5));
-  const revs = monthly.map(m => m.revenue);
-  const w=900, h=400, m={top:34, right:30, bottom:64, left:90};
-  const root = d3.select('#chart-rev').append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
-  const x = d3.scaleBand().domain(xs).range([m.left, w-m.right]).padding(0.28);
-  const mxR = d3.max(revs); const yR = d3.scaleLinear().domain([0, mxR*1.15]).range([h-m.bottom, m.top]);
-  [0.25,0.5,0.75,1].forEach(f => {
-    const yy = m.top + (h-m.top-m.bottom)*(1-f);
-    root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
-    root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+5).attr('text-anchor','end').text('$'+Math.round(mxR*f).toLocaleString());
-  });
-  monthly.forEach((d,i) => {
-    const bx = x(xs[i]); const bw = x.bandwidth();
-    const by = yR(d.revenue); const bh = (h-m.bottom) - by;
-    root.append('rect').attr('class','bar').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill','#7a5c2a').attr('rx',4).style('animation-delay',(0.2 + i*0.06)+'s');
-    if (i%2===0) root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+26).attr('text-anchor','middle').text(xs[i]);
-    root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-10).attr('text-anchor','middle').text('$'+Math.round(d.revenue).toLocaleString());
-  });
+  const xs = monthly.map(m => DATA.monthLabels[DATA.months.indexOf(m.ym)] || m.ym);
+  barChart('#chart-rev', monthly.map(m=>m.revenue), xs, '#7a5c2a', '$');
 
   // SKU revenue rows — revenue + ASP + units (no GM)
   const skus = DATA.cfo.sku_money;
