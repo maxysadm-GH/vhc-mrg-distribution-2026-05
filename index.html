@@ -529,11 +529,15 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
 // ====== US MAP — high contrast ======
 (async function buildMap() {
   const data = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(r=>r.json());
-  const fipsTsv = await fetch('https://gist.githubusercontent.com/mbostock/4090846/raw/07e73f3c2d21558489604a0bc434b3a5cf41a867/us-state-names.tsv').then(r=>r.text());
-  const fipsMap = {};
-  fipsTsv.split('\n').slice(1).forEach(row => {
-    const c = row.split('\t'); if (c.length>=3) fipsMap[c[0]] = c[2];
-  });
+  // Hardcoded FIPS → state code map (2-digit fips ID as int → 2-letter code)
+  const fipsMap = {
+    1:'AL', 2:'AK', 4:'AZ', 5:'AR', 6:'CA', 8:'CO', 9:'CT', 10:'DE', 11:'DC', 12:'FL',
+    13:'GA', 15:'HI', 16:'ID', 17:'IL', 18:'IN', 19:'IA', 20:'KS', 21:'KY', 22:'LA',
+    23:'ME', 24:'MD', 25:'MA', 26:'MI', 27:'MN', 28:'MS', 29:'MO', 30:'MT', 31:'NE',
+    32:'NV', 33:'NH', 34:'NJ', 35:'NM', 36:'NY', 37:'NC', 38:'ND', 39:'OH', 40:'OK',
+    41:'OR', 42:'PA', 44:'RI', 45:'SC', 46:'SD', 47:'TN', 48:'TX', 49:'UT', 50:'VT',
+    51:'VA', 53:'WA', 54:'WV', 55:'WI', 56:'WY', 72:'PR'
+  };
 
   const states = topojson.feature(data, data.objects.states).features;
   const w=975, h=610;
@@ -554,13 +558,13 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
   svg.selectAll('.state').data(states).enter().append('path')
     .attr('class','state').attr('d', path)
     .attr('fill', d => {
-      const code = fipsMap[d.id.toString().padStart(2,'0')];
+      const code = fipsMap[+d.id];
       const s = stateData[code];
       return s ? colorScale(s.total_qty) : '#f5efe1';
     })
     .style('opacity', 0)
     .on('mousemove', function(evt,d) {
-      const code = fipsMap[d.id.toString().padStart(2,'0')];
+      const code = fipsMap[+d.id];
       const s = stateData[code];
       if (!s) {
         tooltip.html(`<strong>${code||'—'}</strong>No active ship-to locations.`)
@@ -580,7 +584,7 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
 
   // State 2-letter labels for states with data
   states.forEach(d => {
-    const code = fipsMap[d.id.toString().padStart(2,'0')];
+    const code = fipsMap[+d.id];
     const s = stateData[code];
     if (!s) return;
     const c = path.centroid(d); if (!c || isNaN(c[0])) return;
@@ -591,7 +595,7 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
   // location dots — bigger, brighter
   const allDots = [];
   states.forEach(d => {
-    const code = fipsMap[d.id.toString().padStart(2,'0')];
+    const code = fipsMap[+d.id];
     const s = stateData[code]; if (!s) return;
     const c = path.centroid(d); if (!c || isNaN(c[0])) return;
     s.stores.forEach((store, i) => {
