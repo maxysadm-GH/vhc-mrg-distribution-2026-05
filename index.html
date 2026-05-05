@@ -211,6 +211,17 @@
 
   .footer-stamp { margin-top:48px; padding-top:20px; border-top:1px solid var(--rule); font-size:10px; letter-spacing:2px; color:var(--ink-3); text-transform:uppercase; display:flex; justify-content:space-between; font-weight:600; }
 
+  /* Page-level footer with co-branding (every section gets one) */
+  .page-footer { margin-top:56px; padding:24px 0 8px; border-top:1px solid var(--rule);
+                   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; }
+  .pf-left { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+  .pf-vosges { height:24px; width:auto; opacity:0.85; }
+  .pf-x { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--ink-3); font-weight:300; }
+  .pf-mrg { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--ink-2); font-weight:600; letter-spacing:0.3px; }
+  .pf-right { display:flex; align-items:center; gap:12px; }
+  .pf-mbacio-lbl { font-size:9px; letter-spacing:2.5px; color:var(--ink-3); text-transform:uppercase; font-weight:600; }
+  .pf-mbacio-mark { font-family:'DM Sans',sans-serif; font-size:15px; letter-spacing:5px; font-weight:700; color:var(--gold-deep); line-height:1; }
+
   .donut-wrap { display:grid; grid-template-columns:auto 1fr; gap:24px; align-items:center; }
   .lgd-row { display:grid; grid-template-columns:18px 1fr auto; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--rule); font-size:13px; color:var(--ink); font-weight:500; }
   .lgd-sw { width:14px; height:14px; border-radius:3px; }
@@ -256,20 +267,28 @@
 <body>
 
 <nav class="nav">
-  <div class="lhs"><span class="v">V</span><span>Vosges Haut-Chocolat · Distribution Review</span></div>
+  <div class="lhs">
+    <img src="assets/vosges-v.png" alt="Vosges" style="height:32px; width:auto;">
+    <span style="color:var(--ink-3); font-weight:400; opacity:0.55;">×</span>
+    <span style="font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--ink-2); letter-spacing:0.2px; text-transform:none;">Marshall Retail Group</span>
+  </div>
   <div class="links">
-    <a href="#cover">Cover</a><a href="#trend">Trend</a><a href="#map">Map</a><a href="#money">$ Money</a><a href="#locations">Locations</a><a href="#audit">Audit</a><a href="#insights">Insights</a>
+    <a href="#cover">Cover</a><a href="#trend">Trend</a><a href="#map">Map</a><a href="#money">$ Revenue</a><a href="#locations">Locations</a><a href="#audit">Audit</a><a href="#insights">Insights</a>
   </div>
 </nav>
 
 <!-- ========= COVER (dark luxury) ========= -->
 <section class="cover" id="cover">
   <header class="reveal r-d1">
-    <div class="cover-mark">
-      <span class="v">V</span>
-      <div class="cover-brand">
-        <span class="b1">VOSGES HAUT-CHOCOLAT</span>
-        <span class="b2">DISTRIBUTION REVIEW · WHOLESALE TRAVEL-RETAIL</span>
+    <div style="display:flex; align-items:center; gap:60px; flex-wrap:wrap;">
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <img src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat" style="height:56px; width:auto; filter:brightness(0) invert(1) sepia(0.4) saturate(2) hue-rotate(15deg) brightness(0.95);">
+        <span style="font-size:9px; letter-spacing:3.5px; color:#7a5c4a; font-weight:600;">EST. 1989 · CHICAGO</span>
+      </div>
+      <span style="font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:#7a5c4a;">×</span>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:600; color:#e2d1a8; letter-spacing:1px; line-height:1;">Marshall Retail Group</div>
+        <span style="font-size:9px; letter-spacing:3.5px; color:#7a5c4a; font-weight:600;">WH SMITH · TRAVEL RETAIL · NORTH AMERICA</span>
       </div>
     </div>
   </header>
@@ -285,7 +304,13 @@
       <div class="stat reveal r-d6"><div class="v countup" data-target="118" data-format="comma" data-prefix="$" data-suffix="K">$0K</div><div class="l">Annualized<br>Run-Rate</div></div>
     </div>
   </div>
-  <div class="meta-line reveal r-d6">Period · July 2025 – May ’26 · Source · Fishbowl ERP customerId 74 · Cross-checked vs ShipStation/Supabase · Generated May 04, 2026</div>
+  <div class="reveal r-d6" style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px; padding-top:32px; border-top:1px solid rgba(197,160,89,0.18);">
+    <div class="meta-line" style="margin:0;">Period · July 2025 – May ’26 · Source · Fishbowl ERP customerId 74 · Cross-checked vs ShipStation / Supabase · Generated May 04, 2026</div>
+    <div style="display:flex; align-items:center; gap:14px; opacity:0.85;">
+      <span style="font-size:9px; letter-spacing:3px; color:#7a5c4a; text-transform:uppercase; font-weight:600;">Prepared by</span>
+      <span style="font-family:'DM Sans',sans-serif; font-size:18px; letter-spacing:6px; font-weight:700; color:#c5a059; line-height:1;">MBACIO</span>
+    </div>
+  </div>
 </section>
 
 <!-- ========= TREND ========= -->
@@ -333,6 +358,18 @@
       <p style="margin-top:14px; font-size:13px;">HHI under 1,500 = <strong style="color:var(--success)">highly diversified</strong>. No single store is over-leveraged.</p>
     </div>
   </div>
+  <div class="page-footer">
+  <div class="pf-left">
+    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
+    <span class="pf-x">×</span>
+    <span class="pf-mrg">Marshall Retail Group</span>
+  </div>
+  <div class="pf-right">
+    <span class="pf-mbacio-lbl">Prepared by</span>
+    <span class="pf-mbacio-mark">MBACIO</span>
+    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  </div>
+</div>
 </section>
 
 <!-- ========= MAP ========= -->
@@ -422,6 +459,18 @@
       </div>
     </div>
   </div>
+  <div class="page-footer">
+  <div class="pf-left">
+    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
+    <span class="pf-x">×</span>
+    <span class="pf-mrg">Marshall Retail Group</span>
+  </div>
+  <div class="pf-right">
+    <span class="pf-mbacio-lbl">Prepared by</span>
+    <span class="pf-mbacio-mark">MBACIO</span>
+    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  </div>
+</div>
 </section>
 
 <!-- ========= LOCATIONS ========= -->
@@ -462,6 +511,18 @@
   </div>
 
   <div id="state-blocks" class="reveal r-d4"></div>
+  <div class="page-footer">
+  <div class="pf-left">
+    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
+    <span class="pf-x">×</span>
+    <span class="pf-mrg">Marshall Retail Group</span>
+  </div>
+  <div class="pf-right">
+    <span class="pf-mbacio-lbl">Prepared by</span>
+    <span class="pf-mbacio-mark">MBACIO</span>
+    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  </div>
+</div>
 </section>
 
 <!-- ========= AUDIT ========= -->
@@ -506,6 +567,18 @@
       </div>
     </div>
   </div>
+  <div class="page-footer">
+  <div class="pf-left">
+    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
+    <span class="pf-x">×</span>
+    <span class="pf-mrg">Marshall Retail Group</span>
+  </div>
+  <div class="pf-right">
+    <span class="pf-mbacio-lbl">Prepared by</span>
+    <span class="pf-mbacio-mark">MBACIO</span>
+    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  </div>
+</div>
 </section>
 
 <!-- ========= INSIGHTS ========= -->
@@ -561,9 +634,22 @@
     </ul>
   </div>
 
-  <div class="footer-stamp">
-    <span>Vosges Haut-Chocolat · Internal · Distribution Review</span>
-    <span>Generated May 04, 2026 · FB customerId 74 · SS Supabase code_red_shipments</span>
+  <div class="page-footer">
+  <div class="pf-left">
+    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
+    <span class="pf-x">×</span>
+    <span class="pf-mrg">Marshall Retail Group</span>
+  </div>
+  <div class="pf-right">
+    <span class="pf-mbacio-lbl">Prepared by</span>
+    <span class="pf-mbacio-mark">MBACIO</span>
+    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  </div>
+</div>
+  <div style="margin-top:24px; text-align:center; font-size:10px; letter-spacing:1.8px; color:var(--ink-3); text-transform:uppercase; font-weight:500; line-height:1.8;">
+    Vosges Haut-Chocolat × Marshall Retail Group · Distribution Review<br>
+    Source · Fishbowl ERP customerId 74 · Cross-checked vs ShipStation Supabase code_red_shipments<br>
+    Prepared by <strong style="color:var(--gold-deep); letter-spacing:3px;">MBACIO</strong> · max@mbacio.com · May 04, 2026
   </div>
 </section>
 
