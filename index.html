@@ -300,7 +300,7 @@
   .map-legend { display:flex; gap:14px; align-items:center; margin-top:18px; flex-wrap:wrap; font-size:10px; color:var(--cream-dim); letter-spacing:2px; text-transform:uppercase; font-weight:600; font-family:'JetBrains Mono',monospace; }
   .legend-swatch { display:inline-block; width:22px; height:12px; border-radius:2px; margin-right:6px; vertical-align:middle; border:1px solid rgba(212,176,106,0.20); }
   .legend-dot { display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:6px; vertical-align:middle; border:1px solid rgba(0,0,0,0.5); box-shadow:0 0 6px currentColor; }
-  .map-tooltip { position:absolute; pointer-events:none; padding:14px 18px; background:rgba(20,10,20,0.95); border:1px solid var(--gold-2); border-radius:8px; color:var(--cream); font-size:12px; line-height:1.55; max-width:300px; box-shadow:0 24px 64px rgba(0,0,0,0.7), 0 0 24px rgba(212,176,106,0.10); opacity:0; transition:opacity .15s; z-index:50; backdrop-filter:blur(20px); }
+  .map-tooltip { position:fixed; pointer-events:none; padding:14px 18px; background:rgba(20,10,20,0.96); border:1px solid var(--gold-2); border-radius:8px; color:var(--cream); font-size:12px; line-height:1.55; max-width:320px; box-shadow:0 24px 64px rgba(0,0,0,0.75), 0 0 28px rgba(212,176,106,0.12); opacity:0; transition:opacity .15s; z-index:1000; backdrop-filter:blur(20px); top:0; left:0; }
   .map-tooltip strong { color:var(--gold-3); font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; display:block; margin-bottom:6px; letter-spacing:0.2px; }
 
   /* ===== Charts ===== */
@@ -421,7 +421,7 @@
   .sc-cold { background:var(--danger); color:#fff; padding:1px 6px; border-radius:8px; font-size:8.5px; letter-spacing:1px; font-family:'JetBrains Mono',monospace; font-weight:700; margin-left:4px; }
 
   /* === MBACIO footer — adapted to deck aesthetics, full-bleed === */
-  .mbacio-footer-wrap { width:100%; margin-top:64px; }
+  .mbacio-footer-wrap { width:100%; margin-top:0; }
   .mbacio-footer { background:linear-gradient(180deg, rgba(15,8,12,0.85) 0%, rgba(8,4,8,0.95) 100%); padding:28px 8% 22px; border-top:1px solid rgba(232,168,56,0.35); position:relative; backdrop-filter:blur(20px); }
   .mbacio-footer::before { content:''; position:absolute; top:-1px; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent 0%, #e8a838 25%, #d4b06a 50%, #e8a838 75%, transparent 100%); }
   .mbacio-footer-inner { max-width:1280px; margin:0 auto; }
@@ -702,11 +702,9 @@
 
   <div id="state-blocks" class="reveal r-d4" style="margin-top:18px;"></div>
 </section>
-<!-- spacing buffer between Locations page and Closing CTA -->
-<div style="height:24px"></div>
 
 <!-- ============ CLOSING (compact, sits flush with Locations) ============ -->
-<section class="page" id="close" style="padding:24px 56px 28px; max-width:1280px; padding-top:24px;">
+<section class="page" id="close" style="padding:24px 56px 0; max-width:1280px; border-top:none;">
   <div class="reveal r-d1" style="padding:24px 32px; background:linear-gradient(135deg, rgba(212,176,106,0.10), rgba(31,19,32,0.45)); border:1px solid var(--panel-border); border-radius:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; backdrop-filter:blur(12px);">
     <div style="flex:1; min-width:280px;">
       <div class="eyebrow" style="margin-bottom:6px;">Internal supplements available</div>
@@ -1007,7 +1005,7 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
         ${lastOrd}
         ${cold}
         ${top3 ? '<div style="margin-top:10px; padding-top:8px; border-top:1px dashed rgba(212,176,106,0.18)"><div style="font-size:9.5px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:JetBrains Mono,monospace; margin-bottom:4px">Top SKUs</div>'+top3+'</div>' : ''}`)
-        .style('left', (evt.pageX+14)+'px').style('top', (evt.pageY+12)+'px').style('opacity',1);
+        .style('left', (evt.clientX+14)+'px').style('top', (evt.clientY+12)+'px').style('opacity',1);
   }
 
   // Append dots without transition so r is correct immediately (transitions can interfere with hit-detection on some browsers)
