@@ -38,7 +38,7 @@
   h3 { font-size:22px; line-height:1.3; font-weight:600; }
   p { font-size:15px; line-height:1.65; color:var(--ink-2); }
   .eyebrow { font-size:11px; letter-spacing:3px; color:var(--gold); font-weight:600; text-transform:uppercase; }
-  .subhead { font-size:17px; color:var(--ink-2); font-weight:400; margin-top:14px; line-height:1.55; }
+  .subhead { font-size:18px; color:var(--ink-2); font-weight:400; margin-top:14px; line-height:1.6; max-width:900px; }
   .rule { width:48px; height:2px; background:var(--gold); margin:24px 0; }
   .meta-line { font-size:11px; letter-spacing:1.8px; color:var(--ink-3); text-transform:uppercase; margin-top:28px; }
 
@@ -78,7 +78,7 @@
   /* CONTENT panels */
   .panel { background:var(--paper-card); border:1px solid var(--rule); border-radius:8px; padding:28px; box-shadow:0 1px 3px rgba(122,92,42,0.06); transition:box-shadow .3s, transform .3s; }
   .panel:hover { box-shadow:0 6px 20px rgba(122,92,42,0.10); }
-  .panel-h { font-size:11px; letter-spacing:2.5px; color:var(--gold-deep); text-transform:uppercase; margin-bottom:20px; font-weight:700; }
+  .panel-h { font-size:13px; letter-spacing:2.5px; color:var(--gold-deep); text-transform:uppercase; margin-bottom:20px; font-weight:700; }
   .panel-band { background:var(--paper-2); border:1px solid var(--rule); border-radius:8px; padding:28px; }
   .grid-2 { display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:start; }
   .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
@@ -123,11 +123,13 @@
   .map-tooltip { position:absolute; pointer-events:none; padding:12px 16px; background:#fefdfa; border:1px solid var(--gold); border-radius:6px; color:var(--ink); font-size:12px; line-height:1.55; max-width:300px; box-shadow:0 12px 32px rgba(31,20,24,0.18); opacity:0; transition:opacity .15s; z-index:50; }
   .map-tooltip strong { color:var(--gold-deep); font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; display:block; margin-bottom:6px; }
 
-  /* SVG charts */
+  /* SVG charts — sized for readability after viewBox scaling */
   .chart-svg { width:100%; height:auto; display:block; }
-  .chart-svg .axis-line { stroke:rgba(122,92,42,0.18); stroke-width:0.6; }
-  .chart-svg .axis-text { fill:var(--ink-3); font-size:11px; font-family:'DM Sans',sans-serif; font-weight:500; }
-  .chart-svg .data-line { fill:none; stroke-width:2.6; stroke-dasharray:1500; stroke-dashoffset:1500; }
+  .chart-svg .axis-line { stroke:rgba(122,92,42,0.22); stroke-width:1; }
+  .chart-svg .axis-text { fill:var(--ink-2); font-size:18px; font-family:'DM Sans',sans-serif; font-weight:600; }
+  .chart-svg .axis-text-y { fill:var(--ink-3); font-size:16px; font-family:'DM Sans',sans-serif; font-weight:600; }
+  .chart-svg .point-label { fill:var(--ink); font-size:20px; font-family:'Cormorant Garamond',serif; font-weight:600; }
+  .chart-svg .data-line { fill:none; stroke-width:4; stroke-dasharray:1500; stroke-dashoffset:1500; }
   .in-view .chart-svg .data-line { animation:dash 1.6s ease-out 0.3s forwards; }
   @keyframes dash { to { stroke-dashoffset:0; } }
   .chart-svg .data-area { opacity:0; }
@@ -139,7 +141,7 @@
   .chart-svg .bar { transform-origin:bottom; transform:scaleY(0); transform-box:fill-box; }
   .in-view .chart-svg .bar { animation:barGrow 0.95s cubic-bezier(.2,.85,.2,1) forwards; }
   @keyframes barGrow { to { transform:scaleY(1); } }
-  .chart-svg .bar-value { fill:var(--ink); font-size:11px; font-weight:600; font-family:'DM Sans',sans-serif; opacity:0; }
+  .chart-svg .bar-value { fill:var(--ink); font-size:20px; font-weight:600; font-family:'Cormorant Garamond',serif; opacity:0; }
   .in-view .chart-svg .bar-value { animation:fadeIn 0.6s ease-out forwards; animation-delay:1s; }
 
   /* PER-LOCATION CARDS — full color treatment */
@@ -523,47 +525,48 @@ function animateCountup(el) {
 
 // ====== Charts ======
 function lineChart(sel, data, xs, color, areaColor) {
-  const w=900, h=260, m={top:18, right:24, bottom:42, left:46};
+  // Larger viewBox, larger margins, larger fonts — labels read at any container size
+  const w=900, h=420, m={top:30, right:30, bottom:64, left:70};
   const root = d3.select(sel).append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
   const x = d3.scalePoint().domain(xs).range([m.left, w-m.right]);
-  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.10]).range([h-m.bottom, m.top]);
+  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.12]).range([h-m.bottom, m.top]);
   const defs = root.append('defs');
   const grad = defs.append('linearGradient').attr('id', 'a-'+sel.slice(1)).attr('x1','0').attr('x2','0').attr('y1','0').attr('y2','1');
-  grad.append('stop').attr('offset','0%').attr('stop-color',areaColor||color).attr('stop-opacity',0.32);
+  grad.append('stop').attr('offset','0%').attr('stop-color',areaColor||color).attr('stop-opacity',0.36);
   grad.append('stop').attr('offset','100%').attr('stop-color',areaColor||color).attr('stop-opacity',0);
   [0,0.25,0.5,0.75,1].forEach(f => {
     const yy = m.top + (h-m.top-m.bottom)*(1-f);
     root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
-    root.append('text').attr('class','axis-text').attr('x',m.left-8).attr('y',yy+3).attr('text-anchor','end').text(Math.round(mx*f));
+    root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+5).attr('text-anchor','end').text(Math.round(mx*f));
   });
-  xs.forEach((lbl,i) => { if (xs.length<=12 || i%2===0) root.append('text').attr('class','axis-text').attr('x',x(lbl)).attr('y',h-m.bottom+18).attr('text-anchor','middle').text(lbl); });
+  xs.forEach((lbl,i) => { if (xs.length<=12 || i%2===0) root.append('text').attr('class','axis-text').attr('x',x(lbl)).attr('y',h-m.bottom+26).attr('text-anchor','middle').text(lbl); });
   const line = d3.line().x((_,i)=>x(xs[i])).y(d=>y(d)).curve(d3.curveMonotoneX);
   const area = d3.area().x((_,i)=>x(xs[i])).y0(h-m.bottom).y1(d=>y(d)).curve(d3.curveMonotoneX);
   root.append('path').attr('class','data-area').attr('d',area(data)).attr('fill','url(#a-'+sel.slice(1)+')');
   const path = root.append('path').attr('class','data-line').attr('d',line(data)).style('stroke',color);
   const len = path.node().getTotalLength(); path.style('stroke-dasharray', len).style('stroke-dashoffset', len);
   data.forEach((d,i) => {
-    root.append('circle').attr('class','data-dot').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r',4.2).style('fill',color).style('stroke','#fefdfa').style('stroke-width',1.5)
+    root.append('circle').attr('class','data-dot').attr('cx',x(xs[i])).attr('cy',y(d)).attr('r',7).style('fill',color).style('stroke','#fefdfa').style('stroke-width',2.5)
       .style('animation-delay',(1.4 + i*0.05)+'s');
-    root.append('text').attr('class','axis-text').attr('x',x(xs[i])).attr('y',y(d)-12).attr('text-anchor','middle').style('fill','#1f1418').style('font-weight',600).text(Math.round(d));
+    root.append('text').attr('class','point-label').attr('x',x(xs[i])).attr('y',y(d)-18).attr('text-anchor','middle').text(Math.round(d));
   });
 }
 function barChart(sel, data, xs, color) {
-  const w=900, h=240, m={top:18, right:24, bottom:42, left:46};
+  const w=900, h=400, m={top:34, right:30, bottom:64, left:70};
   const root = d3.select(sel).append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
-  const x = d3.scaleBand().domain(xs).range([m.left, w-m.right]).padding(0.32);
-  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.12]).range([h-m.bottom, m.top]);
+  const x = d3.scaleBand().domain(xs).range([m.left, w-m.right]).padding(0.28);
+  const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.14]).range([h-m.bottom, m.top]);
   [0.25,0.5,0.75,1].forEach(f => {
     const yy = m.top + (h-m.top-m.bottom)*(1-f);
     root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
-    root.append('text').attr('class','axis-text').attr('x',m.left-8).attr('y',yy+3).attr('text-anchor','end').text(Math.round(mx*f));
+    root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+5).attr('text-anchor','end').text(Math.round(mx*f).toLocaleString());
   });
   data.forEach((d,i) => {
     const bx = x(xs[i]); const bw = x.bandwidth();
     const by = y(d); const bh = (h-m.bottom) - by;
-    root.append('rect').attr('class','bar').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill',color).attr('rx',3).style('animation-delay',(0.2 + i*0.06)+'s');
-    if (xs.length<=12 || i%2===0) root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+18).attr('text-anchor','middle').text(xs[i]);
-    root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-6).attr('text-anchor','middle').text(Math.round(d));
+    root.append('rect').attr('class','bar').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill',color).attr('rx',4).style('animation-delay',(0.2 + i*0.06)+'s');
+    if (xs.length<=12 || i%2===0) root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+26).attr('text-anchor','middle').text(xs[i]);
+    root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-10).attr('text-anchor','middle').text(Math.round(d).toLocaleString());
   });
 }
 lineChart('#chart-active', DATA.activeShipTos, DATA.monthLabels, '#a07a3a', '#c5a059');
