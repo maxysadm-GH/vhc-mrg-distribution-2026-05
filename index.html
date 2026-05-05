@@ -700,7 +700,7 @@
     <div id="top-locations-body"></div>
   </div>
 
-  <div id="state-blocks" class="reveal r-d4" style="margin-top:18px;"></div>
+  <div id="state-blocks" style="margin-top:18px;"></div>
 </section>
 
 <!-- ============ CLOSING (compact, sits flush with Locations) ============ -->
@@ -810,7 +810,7 @@ const io = new IntersectionObserver((entries) => {
       e.target.querySelectorAll?.('.countup').forEach(animateCountup);
     }
   });
-}, {threshold: 0.18});
+}, {threshold: 0.01, rootMargin: '0px 0px -10% 0px'});
 document.querySelectorAll('.reveal, .bucket, .panel, .insight').forEach(el => io.observe(el));
 
 function animateCountup(el) {
