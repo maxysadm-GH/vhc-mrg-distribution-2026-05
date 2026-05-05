@@ -688,7 +688,7 @@
 </section>
 
 <!-- ============ LOCATIONS ============ -->
-<section class="page" id="locations">
+<section class="page" id="locations" style="padding-bottom:18px;">
   <div class="eyebrow reveal r-d1">05 · Per-Location View</div>
   <h2 class="reveal r-d2">One sparkline per door.</h2>
   <div class="rule reveal r-d2"></div>
@@ -704,7 +704,7 @@
 </section>
 
 <!-- ============ CLOSING (compact, sits flush with Locations) ============ -->
-<section class="page" id="close" style="padding:24px 56px 0; max-width:1280px; border-top:none;">
+<section class="page" id="close" style="padding:14px 56px 0; max-width:1280px; border-top:none;">
   <div class="reveal r-d1" style="padding:24px 32px; background:linear-gradient(135deg, rgba(212,176,106,0.10), rgba(31,19,32,0.45)); border:1px solid var(--panel-border); border-radius:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; backdrop-filter:blur(12px);">
     <div style="flex:1; min-width:280px;">
       <div class="eyebrow" style="margin-bottom:6px;">Internal supplements available</div>
@@ -954,13 +954,13 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
     .style('opacity', 0)
     .on('mousemove', function(evt,d) {
       const code = fipsMap[+d.id]; const s = stateData[code];
-      if (!s) { tooltip.html(`<strong>${code||'—'}</strong>No active ship-to locations.`).style('left',(evt.clientX+14)+'px').style('top',(evt.clientY+12)+'px').style('opacity',1); return; }
+      if (!s) { tooltip.html(`<strong>${code||'—'}</strong>No active ship-to locations.`).style('opacity', 0); placeTooltip(tooltip, evt); return; }
       const stores = s.stores.slice(0,8).map(st=>`<div style="margin-top:3px;color:var(--cream-dim);font-size:11.5px">• ${st.name.slice(0,40)}</div>`).join('');
       const more = s.stores.length>8 ? `<div style="color:var(--ink-soft);font-size:10px;margin-top:4px">…and ${s.stores.length-8} more</div>` : '';
       tooltip.html(`<strong>${code} · ${s.locations} location${s.locations===1?'':'s'}</strong>
         <span style="color:var(--success);font-weight:600">${s.expanding} expanding</span> · <span style="color:var(--warning);font-weight:600">${s.flat} flat</span> · <span style="color:var(--danger);font-weight:600">${s.contracting} contracting</span>
         <div style="margin-top:6px;color:var(--cream);font-weight:600">${s.total_qty.toLocaleString()} units shipped</div>
-        ${stores}${more}`).style('left', (evt.clientX+14)+'px').style('top', (evt.clientY+12)+'px').style('opacity',1);
+        ${stores}${more}`).style('opacity', 0); placeTooltip(tooltip, evt);
     })
     .on('mouseleave', () => tooltip.style('opacity',0))
     .transition().duration(800).delay((_,i)=>i*5).style('opacity', 1);
@@ -979,6 +979,23 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
       allDots.push({cx:c[0]+Math.cos(angle)*r, cy:c[1]+Math.sin(angle)*r+(s.locations>=5?4:0), store, stateCode:code});
     });
   });
+  // Position tooltip near cursor with viewport-edge avoidance
+  function placeTooltip(tt, evt) {
+    const tipEl = tt.node();
+    // Force layout so we get accurate dimensions
+    tipEl.style.opacity = '0.001';
+    const rect = tipEl.getBoundingClientRect();
+    const w = rect.width || 320, h = rect.height || 200;
+    const margin = 16;
+    let left = evt.clientX + 18;
+    let top = evt.clientY + 14;
+    if (left + w + margin > window.innerWidth) left = evt.clientX - w - 18;
+    if (left < margin) left = margin;
+    if (top + h + margin > window.innerHeight) top = evt.clientY - h - 14;
+    if (top < margin) top = margin;
+    tt.style('left', left+'px').style('top', top+'px').style('opacity', 1);
+  }
+
   // Helper: show tooltip near a circle event. Robust to nulls.
   function showDotTip(evt, d) {
       if (!d || !d.store) return;
@@ -1005,7 +1022,7 @@ barChart('#chart-new', DATA.newShipTosPerMonth.map(d=>d.new_ship_tos), DATA.newS
         ${lastOrd}
         ${cold}
         ${top3 ? '<div style="margin-top:10px; padding-top:8px; border-top:1px dashed rgba(212,176,106,0.18)"><div style="font-size:9.5px; letter-spacing:1.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:JetBrains Mono,monospace; margin-bottom:4px">Top SKUs</div>'+top3+'</div>' : ''}`)
-        .style('left', (evt.clientX+14)+'px').style('top', (evt.clientY+12)+'px').style('opacity',1);
+        .style('opacity', 0); placeTooltip(tooltip, evt);
   }
 
   // Append dots without transition so r is correct immediately (transitions can interfere with hit-detection on some browsers)
