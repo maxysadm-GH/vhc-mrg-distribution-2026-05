@@ -289,16 +289,18 @@
   .sc-bar { margin-top:12px; height:5px; background:rgba(212,176,106,0.10); border-radius:3px; overflow:hidden; }
   .sc-bar > div { height:100%; border-radius:3px; transition:width 1.4s cubic-bezier(0.2,0.8,0.2,1); box-shadow:0 0 8px currentColor; }
 
-  /* Page footer (co-branded) */
-  .page-footer { margin-top:64px; padding:24px 0 8px; border-top:1px solid var(--line);
-                   display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; }
-  .pf-left { display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
-  .pf-vosges { height:22px; width:auto; opacity:0.7; filter:brightness(0) saturate(100%) invert(82%) sepia(31%) saturate(456%) hue-rotate(354deg) brightness(85%) contrast(85%); }
-  .pf-x { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--ink-soft); font-weight:300; }
-  .pf-mrg { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--cream-dim); font-weight:600; letter-spacing:0.3px; }
-  .pf-right { display:flex; align-items:center; gap:12px; }
-  .pf-mbacio-lbl { font-size:9px; letter-spacing:2.5px; color:var(--ink-soft); text-transform:uppercase; font-weight:600; font-family:'JetBrains Mono',monospace; }
-  .pf-mbacio-mark { font-family:'DM Sans',sans-serif; font-size:15px; letter-spacing:5px; font-weight:700; color:var(--gold-3); line-height:1; text-shadow:0 0 8px var(--gold-glow); }
+  /* === MBACIO canonical footer (navy #1e3a5f + gold #e8a838) === */
+  .mbacio-footer { background:#1e3a5f; padding:20px 28px 16px; border-top:3px solid #e8a838; margin-top:64px; border-radius:0 0 8px 8px; }
+  .mbacio-footer .ds-card { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10); padding:5px 12px; font-size:11px; border-radius:4px; color:#fff; }
+  .mbacio-footer .ds-dot { width:8px; height:8px; border-radius:50%; background:#6b7280; flex-shrink:0; }
+  .mbacio-footer .ds-dot.green { background:#22c55e; box-shadow:0 0 6px rgba(34,197,94,0.5); }
+  .mbacio-footer .ds-dot.red   { background:#ef4444; box-shadow:0 0 6px rgba(239,68,68,0.5); }
+  .mbacio-footer .ds-dot.amber { background:#f59e0b; }
+  .mbacio-footer .ds-name { font-weight:600; color:rgba(255,255,255,0.85); }
+  .mbacio-footer .ds-status { color:rgba(255,255,255,0.55); font-size:10px; }
+  .mbacio-brand-link:hover img { filter:drop-shadow(0 0 10px rgba(232,168,56,0.7)) drop-shadow(0 0 20px rgba(232,168,56,0.4)); transform:scale(1.03); }
+  .mbacio-footer .social-icon { color:rgba(255,255,255,0.5); transition:color .2s, transform .2s; display:inline-flex; }
+  .mbacio-footer .social-icon:hover { color:#e8a838; transform:scale(1.15); }
 
   /* Mobile */
   @media (max-width:980px) {
@@ -370,13 +372,42 @@
     </div>
   </div>
 
-  <div class="cover-foot reveal r-d6">
-    <div class="meta-line" style="margin:0;">Period · Jul 2025 – May ’26 · Source · Fishbowl ERP customerId 74 · Audited vs ShipStation/Supabase · Generated May 04, 2026</div>
-    <div style="display:flex; align-items:center; gap:14px;">
-      <span class="pf-mbacio-lbl">Prepared by</span>
-      <span class="pf-mbacio-mark">MBACIO</span>
+  <div class="reveal r-d6"><div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
+  </div>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
     </div>
   </div>
+</div></div>
 </section>
 
 <!-- ============ TREND ============ -->
@@ -425,16 +456,40 @@
       <p style="margin-top:18px; font-size:13px;">HHI under 1,500 = <strong style="color:var(--success)">highly diversified</strong>. No single store is over-leveraged.</p>
     </div>
   </div>
-  <div class="page-footer">
-  <div class="pf-left">
-    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
-    <span class="pf-x">×</span>
-    <span class="pf-mrg">Marshall Retail Group</span>
+  <div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
   </div>
-  <div class="pf-right">
-    <span class="pf-mbacio-lbl">Prepared by</span>
-    <span class="pf-mbacio-mark">MBACIO</span>
-    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 </section>
@@ -467,16 +522,40 @@
   </div>
 
   <div class="grid-3 reveal r-d4" style="margin-top:24px;" id="state-cards"></div>
-  <div class="page-footer">
-  <div class="pf-left">
-    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
-    <span class="pf-x">×</span>
-    <span class="pf-mrg">Marshall Retail Group</span>
+  <div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
   </div>
-  <div class="pf-right">
-    <span class="pf-mbacio-lbl">Prepared by</span>
-    <span class="pf-mbacio-mark">MBACIO</span>
-    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 </section>
@@ -532,16 +611,40 @@
       </div>
     </div>
   </div>
-  <div class="page-footer">
-  <div class="pf-left">
-    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
-    <span class="pf-x">×</span>
-    <span class="pf-mrg">Marshall Retail Group</span>
+  <div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
   </div>
-  <div class="pf-right">
-    <span class="pf-mbacio-lbl">Prepared by</span>
-    <span class="pf-mbacio-mark">MBACIO</span>
-    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 </section>
@@ -560,16 +663,40 @@
   </div>
 
   <div id="state-blocks" class="reveal r-d4"></div>
-  <div class="page-footer">
-  <div class="pf-left">
-    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
-    <span class="pf-x">×</span>
-    <span class="pf-mrg">Marshall Retail Group</span>
+  <div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
   </div>
-  <div class="pf-right">
-    <span class="pf-mbacio-lbl">Prepared by</span>
-    <span class="pf-mbacio-mark">MBACIO</span>
-    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 </section>
@@ -614,16 +741,40 @@
       </div>
     </div>
   </div>
-  <div class="page-footer">
-  <div class="pf-left">
-    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
-    <span class="pf-x">×</span>
-    <span class="pf-mrg">Marshall Retail Group</span>
+  <div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
   </div>
-  <div class="pf-right">
-    <span class="pf-mbacio-lbl">Prepared by</span>
-    <span class="pf-mbacio-mark">MBACIO</span>
-    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 </section>
@@ -651,23 +802,42 @@
     </ul>
   </div>
 
-  <div class="page-footer">
-  <div class="pf-left">
-    <img class="pf-vosges" src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
-    <span class="pf-x">×</span>
-    <span class="pf-mrg">Marshall Retail Group</span>
+  <div class="mbacio-footer">
+  <!-- Source row (deck variant — replaces dashboard's live data-source health row) -->
+  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; align-items:center;">
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Fishbowl ERP</span><span class="ds-status">customerId 74</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">ShipStation</span><span class="ds-status">via Supabase · audit-matched</span></div>
+    <div class="ds-card"><span class="ds-dot green"></span><span class="ds-name">Period</span><span class="ds-status">Jul 2025 – May ’26</span></div>
+    <div style="margin-left:auto; font-size:10px; color:rgba(255,255,255,0.55); white-space:nowrap;">Generated · May 04, 2026</div>
   </div>
-  <div class="pf-right">
-    <span class="pf-mbacio-lbl">Prepared by</span>
-    <span class="pf-mbacio-mark">MBACIO</span>
-    <span class="pf-mbacio-lbl">· May 04, 2026</span>
+  <!-- MBACIO Branding -->
+  <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.12); padding-top:14px; flex-wrap:wrap; gap:14px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <a href="https://mbacio.com" target="_blank" rel="noopener" class="mbacio-brand-link" title="MBACIO — Making I.T. Easy">
+        <img src="assets/mbacio-logo.png" alt="MBACIO — Making I.T. Easy" style="height:36px; transition:filter 0.3s, transform 0.3s;" />
+      </a>
+      <div>
+        <div style="font-size:12px; color:#e8a838; font-family:'DM Sans',sans-serif; font-weight:700; letter-spacing:0.04em;">Powered by SimpleData</div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.6);">
+          <a href="https://mbacio.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.7); text-decoration:underline;">www.mbacio.com</a>
+          &nbsp;&#8226;&nbsp; <a href="tel:+17736572300" style="color:rgba(255,255,255,0.7); text-decoration:none;">(773) 657-2300</a>
+          &nbsp;&#8226;&nbsp; <a href="mailto:info@mbacio.com" style="color:rgba(255,255,255,0.7); text-decoration:none;">info@mbacio.com</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="https://www.linkedin.com/company/mbacio" target="_blank" rel="noopener" title="LinkedIn" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/mbacio" target="_blank" rel="noopener" title="Facebook" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/mbacio_llc" target="_blank" rel="noopener" title="Instagram" class="social-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+      </a>
+    </div>
   </div>
 </div>
-  <div style="margin-top:32px; text-align:center; font-size:10px; letter-spacing:2px; color:var(--ink-soft); text-transform:uppercase; font-weight:500; line-height:1.9; font-family:'JetBrains Mono',monospace;">
-    Vosges Haut-Chocolat × Marshall Retail Group · Distribution Review<br>
-    Source · Fishbowl ERP customerId 74 · Audited vs ShipStation Supabase code_red_shipments<br>
-    Prepared by <strong style="color:var(--gold-3); letter-spacing:4px;">MBACIO</strong> · max@mbacio.com · May 04, 2026
-  </div>
 </section>
 
 <script>
