@@ -512,7 +512,7 @@
     <span class="nav-mrg">Marshall Retail Group</span>
   </div>
   <div class="links">
-    <a href="#cover">Cover</a><a href="#trend">Trend</a><a href="#map">Map</a><a href="#money">$ Revenue</a><a href="#locations">Locations</a><a href="audit-internal.html" target="_blank" title="Internal: audit + next steps (separate report)">Internal Notes ↗</a>
+    <a href="#cover">Cover</a><a href="#trend">Trend</a><a href="#map">Map</a><a href="#money">$ Revenue</a><a href="#sales">Sales History</a><a href="#locations">Locations</a><a href="audit-internal.html" target="_blank" title="Internal: audit + next steps (separate report)">Internal Notes ↗</a>
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
       <svg class="theme-btn-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg class="theme-btn-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -687,9 +687,54 @@
   </div>
 </section>
 
+<!-- ============ SALES HISTORY (YoY) ============ -->
+<section class="page" id="sales">
+  <div class="eyebrow reveal r-d1">05 · Sales History</div>
+  <h2 class="reveal r-d2">A full year of orders — and it's growing.</h2>
+  <div class="rule reveal r-d2"></div>
+  <p class="subhead reveal r-d2">Net product sales to WH&nbsp;Smith / MRG, May&nbsp;2025 through May&nbsp;2026. The trailing twelve months (Jun&nbsp;’25–May&nbsp;’26) booked <strong>$86,854</strong> across <strong>261 orders</strong>. On a like-for-like basis — the eight months (Oct–May) present in both years — net sales are <strong style="color:var(--success)">up 32.8%</strong>.</p>
+
+  <div class="grid-3 reveal r-d3" style="margin-top:32px; margin-bottom:22px;">
+    <div class="panel">
+      <div class="panel-spot"></div>
+      <div class="panel-h">Trailing 12 Months · Net Sales</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:62px; line-height:1; font-weight:600; color:var(--gold-3); margin-top:6px; text-shadow:0 0 28px var(--gold-glow);" class="countup" data-target="86854" data-format="comma" data-prefix="$">$0</div>
+      <div style="font-size:12px; color:var(--cream-dim); margin-top:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.5px;">Jun 2025 – May ’26 · 261 orders</div>
+    </div>
+    <div class="panel">
+      <div class="panel-spot"></div>
+      <div class="panel-h">Like-for-Like Growth · YoY</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:62px; line-height:1; font-weight:600; color:var(--success); margin-top:6px; text-shadow:0 0 28px rgba(110,193,138,0.35);" class="countup" data-target="32.8" data-prefix="+" data-suffix="%">+0%</div>
+      <div style="font-size:12px; color:var(--cream-dim); margin-top:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.5px;">Oct–May ’26 vs Oct–May ’25 · same 8 months</div>
+    </div>
+    <div class="panel">
+      <div class="panel-spot"></div>
+      <div class="panel-h">Prior Year · Net Sales</div>
+      <div style="font-family:'Cormorant Garamond',serif; font-size:62px; line-height:1; font-weight:600; color:var(--gold-4); margin-top:6px; text-shadow:0 0 28px var(--gold-glow);" class="countup" data-target="53646" data-format="comma" data-prefix="$">$0</div>
+      <div style="font-size:12px; color:var(--cream-dim); margin-top:12px; font-family:'JetBrains Mono',monospace; letter-spacing:0.5px;">Oct 2024 – May ’25 · 189 orders · partial*</div>
+    </div>
+  </div>
+
+  <div class="panel reveal r-d4" style="margin-top:6px;">
+    <div class="panel-spot"></div>
+    <div class="panel-h">Monthly Net Sales · May ’25 → May ’26</div>
+    <div id="chart-sales-trend"></div>
+  </div>
+
+  <div class="grid-2 reveal r-d5" style="margin-top:22px;">
+    <div class="panel"><div class="panel-spot"></div><div class="panel-h">Net Sales by SKU · This Year vs Prior</div><div id="sales-sku"></div></div>
+    <div class="panel"><div class="panel-spot"></div><div class="panel-h">Top 10 Locations by Sales · Trailing 12 Mo</div><div id="sales-top-stores"></div></div>
+  </div>
+
+  <div class="reveal r-d6" style="margin-top:22px; padding:14px 18px; background:rgba(212,176,106,0.08); border-left:3px solid var(--gold-3); border-radius:6px;">
+    <div style="font-size:10px; letter-spacing:1.8px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:'JetBrains Mono',monospace;">* Basis &amp; data note</div>
+    <p style="margin-top:8px; font-size:13px; color:var(--cream-dim); line-height:1.6;">Net sales = order subtotal (product revenue, excluding freight &amp; tax), sourced from Fishbowl for WH&nbsp;Smith / MRG (customer #74). WH&nbsp;Smith order history in Fishbowl begins <strong>3&nbsp;Oct&nbsp;2024</strong>, so the prior fiscal year is a partial eight months — the headline growth figure compares only the <strong>identical Oct–May window</strong> in both years (8 mo vs 8 mo), not the full year against a partial one. Two SKUs new to the assortment this year — <strong>Red Hawaiian Salt Caramel 6PC</strong> and the <strong>Maison Truffle 4PC</strong> — added $18.3K with no prior-year base.</p>
+  </div>
+</section>
+
 <!-- ============ LOCATIONS ============ -->
 <section class="page" id="locations" style="padding-bottom:18px;">
-  <div class="eyebrow reveal r-d1">05 · Per-Location View</div>
+  <div class="eyebrow reveal r-d1">06 · Per-Location View</div>
   <h2 class="reveal r-d2">One sparkline per door.</h2>
   <div class="rule reveal r-d2"></div>
   <p class="subhead reveal r-d2">Each card shows monthly SKU breadth as a sparkline. Left rail color reflects trajectory: green expanding · gold flat · red contracting.</p>
@@ -1450,6 +1495,81 @@ if (document.getElementById('donut')) {
       <div class="lb-bar-wrap"><span class="lb-share">${t.share.toFixed(1)}%</span><div class="lb-bar"><div style="--target-w:${widthPct}%"></div></div></div>
       <div class="lb-units">$${Math.round(t.revenue).toLocaleString()}<small>revenue</small></div></div>`;
   }).join('');
+})();
+
+// ============ SALES HISTORY (YoY) renderers ============
+const SALES_HIST = {"cur": {"orders": 261, "net": 86854.32}, "pri": {"orders": 189, "net": 53645.76}, "ll": {"current": {"orders": 206, "net": 71250.48}, "prior": {"orders": 189, "net": 53645.76}, "yoy_net_pct": 32.8, "yoy_orders_pct": 9.0}, "spine": [{"lbl": "May '25", "net": 7076.16, "orders": 26}, {"lbl": "Jun '25", "net": 3386.88, "orders": 13}, {"lbl": "Jul '25", "net": 4233.6, "orders": 16}, {"lbl": "Aug '25", "net": 4536.0, "orders": 17}, {"lbl": "Sep '25", "net": 3447.36, "orders": 9}, {"lbl": "Oct '25", "net": 10523.52, "orders": 34}, {"lbl": "Nov '25", "net": 3991.68, "orders": 13}, {"lbl": "Dec '25", "net": 9530.88, "orders": 21}, {"lbl": "Jan '26", "net": 3996.0, "orders": 13}, {"lbl": "Feb '26", "net": 6454.56, "orders": 20}, {"lbl": "Mar '26", "net": 18885.84, "orders": 58}, {"lbl": "Apr '26", "net": 7072.56, "orders": 19}, {"lbl": "May '26", "net": 10795.44, "orders": 28}], "skus": [{"sku": "1801012", "label": "Pink Himalayan Crystal Salt", "cur": 17660.16, "pri": 16873.92}, {"sku": "1801009", "label": "Matcha Green Tea Chocolate", "cur": 15785.28, "pri": 13245.12}, {"sku": "1801004", "label": "Coconut & Banana Super Dark", "cur": 14757.12, "pri": 11188.8}, {"sku": "1801027", "label": "Red Hawaiian Salt Caramel 6PC", "cur": 10710.0, "pri": 0.0}, {"sku": "1801022", "label": "Barcelona Exotic Chocolate", "cur": 10402.56, "pri": 6652.8}, {"sku": "1801021", "label": "Bacon Exotic Chocolate Bar", "cur": 9979.2, "pri": 5685.12}, {"sku": "1801758", "label": "Vosges Maison Truffle 4PC", "cur": 7560.0, "pri": 0.0}], "stores": [{"name": "SHOREPOINTS MARKET-EWR AIRPORT (T1) (NJ)", "cur": 4912.32, "pri": 1330.56, "orders": 7}, {"name": "DISTRICT MARKET-SFO AP (CA)", "cur": 4496.16, "pri": 1572.48, "orders": 9}, {"name": "NATALIES CANDY AT SEA-TAC  AP (WA)", "cur": 3681.6, "pri": 1028.16, "orders": 8}, {"name": "SILICON VALLEY NEWS-SFO AP (CA)", "cur": 2880.96, "pri": 1330.56, "orders": 6}, {"name": "DISTRICT MARKET-BWI AIRPORT (NJ)", "cur": 2782.56, "pri": 241.92, "orders": 7}, {"name": "THE ARTS DISTRICT MARKET - SAN (CA)", "cur": 2661.12, "pri": 0.0, "orders": 5}, {"name": "FLIGHT STOP-DEN AIRPORT (GATE 33 &  55) (CO)", "cur": 2607.84, "pri": 0.0, "orders": 6}, {"name": "SIX POINTS MARKET-ORD AP (IL)", "cur": 2388.0, "pri": 725.76, "orders": 5}, {"name": "DISTRICT MARKET-IAD AIRPORT (VA)", "cur": 2304.0, "pri": 483.84, "orders": 6}, {"name": "INMOTION-LAS AIRPORT (NV)", "cur": 2150.4, "pri": 967.68, "orders": 5}]};
+
+(function() {
+  // 1) Monthly net-sales trend — every bar labeled, gold gradient (matches Revenue page)
+  (function salesTrend() {
+    const xs = SALES_HIST.spine.map(s => s.lbl);
+    const data = SALES_HIST.spine.map(s => s.net);
+    const w=1180, h=380, m={top:48, right:30, bottom:62, left:92};
+    const root = d3.select('#chart-sales-trend').append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
+    const x = d3.scaleBand().domain(xs).range([m.left, w-m.right]).padding(0.32);
+    const mx = d3.max(data); const y = d3.scaleLinear().domain([0, mx*1.20]).range([h-m.bottom, m.top]);
+    const defs = root.append('defs');
+    const grad = defs.append('linearGradient').attr('id','b-saleshist').attr('x1','0').attr('x2','0').attr('y1','0').attr('y2','1');
+    grad.append('stop').attr('offset','0%').attr('stop-color','#d4b06a').attr('stop-opacity',0.95);
+    grad.append('stop').attr('offset','100%').attr('stop-color','#d4b06a').attr('stop-opacity',0.45);
+    [0, 0.5, 1].forEach(f => {
+      const yy = m.top + (h-m.top-m.bottom)*(1-f);
+      root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
+      root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+5).attr('text-anchor','end').text('$'+Math.round(mx*f).toLocaleString());
+    });
+    data.forEach((d,i) => {
+      const bx = x(xs[i]); const bw = x.bandwidth();
+      const by = y(d); const bh = (h-m.bottom) - by;
+      root.append('rect').attr('class','bar').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill','url(#b-saleshist)').attr('rx',4).style('animation-delay',(0.2 + i*0.05)+'s').style('filter','drop-shadow(0 0 6px #d4b06a55)');
+      root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+28).attr('text-anchor','middle').style('font-size','13px').text(xs[i]);
+      root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-10).attr('text-anchor','middle').style('font-size','12.5px').style('fill','#d4b06a').text('$'+(Math.round(d/100)/10).toFixed(1)+'k');
+    });
+  })();
+
+  // 2) Net sales by SKU — current bar with prior-year ghost marker + YoY delta
+  (function salesSku() {
+    const maxRev = Math.max(...SALES_HIST.skus.map(s=>Math.max(s.cur, s.pri)));
+    document.getElementById('sales-sku').innerHTML = SALES_HIST.skus.map(s => {
+      const cw = (s.cur / maxRev * 100).toFixed(1);
+      const pw = (s.pri / maxRev * 100).toFixed(1);
+      const isNew = s.pri === 0;
+      const delta = isNew ? 'NEW' : (s.cur>=s.pri?'+':'') + Math.round((s.cur-s.pri)/s.pri*100) + '%';
+      const dcolor = isNew ? 'var(--gold-4)' : (s.cur>=s.pri ? 'var(--success)' : 'var(--danger)');
+      return `<div style="margin-bottom:13px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; font-size:13px;">
+          <span style="font-weight:600; color:var(--cream);">${s.label}</span>
+          <span><span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:${dcolor}; font-weight:600; margin-right:10px;">${delta}</span><span style="font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--gold-3); font-weight:600; text-shadow:0 0 10px var(--gold-glow)">$${Math.round(s.cur).toLocaleString()}</span></span>
+        </div>
+        <div style="position:relative; height:9px; background:rgba(212,176,106,0.08); border-radius:4px; overflow:visible;">
+          <div style="height:100%; width:${cw}%; background:linear-gradient(90deg, var(--gold-2) 0%, var(--gold-3) 100%); border-radius:4px; box-shadow:0 0 8px var(--gold-glow);"></div>
+          ${isNew?'':`<div title="Prior year" style="position:absolute; top:-3px; left:${pw}%; width:2px; height:15px; background:var(--cream-dim); opacity:0.85;"></div>`}
+        </div>
+        <div style="display:flex; justify-content:flex-end; margin-top:4px; font-size:10.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace;">
+          ${isNew?'no prior-year sales':'prior yr $'+Math.round(s.pri).toLocaleString()+' &nbsp;┃ marker'}
+        </div>
+      </div>`;
+    }).join('');
+  })();
+
+  // 3) Top 10 locations by sales (trailing 12 mo) with YoY delta
+  (function salesStores() {
+    const top = SALES_HIST.stores;
+    const maxCur = Math.max(...top.map(t=>t.cur));
+    document.getElementById('sales-top-stores').innerHTML = top.map((t,i) => {
+      const widthPct = (t.cur / maxCur * 100).toFixed(1);
+      const rankCls = i===0?'r1':i===1?'r2':i===2?'r3':'rn';
+      const isNew = t.pri === 0;
+      const delta = isNew ? 'NEW' : (t.cur>=t.pri?'+':'') + Math.round((t.cur-t.pri)/t.pri*100) + '%';
+      const dcolor = isNew ? 'var(--gold-4)' : (t.cur>=t.pri ? 'var(--success)' : 'var(--danger)');
+      const nm = t.name.replace(/\s*\([A-Z]{2}\)\s*$/,'');
+      const st = (t.name.match(/\(([A-Z]{2})\)\s*$/)||[])[1] || '';
+      return `<div class="lb-row"><div class="lb-rank ${rankCls}">${i+1}</div>
+        <div class="lb-info"><div class="lb-name">${nm}</div><div class="lb-loc">${st} · ${t.orders} orders · <span style="color:${dcolor}; font-weight:600">${delta} YoY</span></div></div>
+        <div class="lb-bar-wrap"><div class="lb-bar"><div style="--target-w:${widthPct}%"></div></div></div>
+        <div class="lb-units">$${Math.round(t.cur).toLocaleString()}<small>net sales</small></div></div>`;
+    }).join('');
+  })();
 })();
 </script>
 </body>

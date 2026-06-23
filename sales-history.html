@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>WH Smith / MRG · Historical Sales · Vosges Haut-Chocolat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root{
+    --bg-0:#0a0508; --bg-2:#1f1320; --line:#3d2940; --line-2:#5c4060;
+    --gold-2:#b8924a; --gold-3:#d4b06a; --gold-4:#f0d795; --gold-glow:rgba(212,176,106,0.55);
+    --cream:#f5ebd9; --cream-dim:#cfb988; --ink-soft:#9d8870;
+    --success:#6ec18a; --danger:#e07a6c;
+    --panel-border:rgba(212,176,106,0.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg-0); color:var(--cream); font-family:'DM Sans',sans-serif; -webkit-font-smoothing:antialiased;}
+  .bg-mesh{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.6;
+    background:radial-gradient(at 15% 12%, rgba(124,94,42,0.35) 0px, transparent 50%),
+               radial-gradient(at 85% 8%, rgba(212,176,106,0.14) 0px, transparent 45%),
+               radial-gradient(at 70% 80%, rgba(124,94,42,0.22) 0px, transparent 50%);}
+  .wrap{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:54px 56px 40px;}
+  .brand{display:flex; align-items:center; gap:14px; padding-bottom:20px; border-bottom:1px solid var(--line);}
+  .brand img{height:34px; filter:drop-shadow(0 0 8px rgba(212,176,106,0.3));}
+  .brand .x{color:var(--gold-3); font-size:18px;}
+  .brand .mrg{font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--cream); font-weight:600;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:2.5px; color:var(--gold-3); text-transform:uppercase; font-weight:700;}
+  h1{font-family:'Cormorant Garamond',serif; font-weight:600; font-size:54px; line-height:1.04; margin:14px 0 6px; letter-spacing:-0.5px;}
+  .rule{width:70px; height:2px; background:linear-gradient(90deg,var(--gold-3),transparent); margin:14px 0 18px;}
+  .subhead{font-size:15.5px; line-height:1.66; color:var(--cream-dim); max-width:860px;}
+  .meta{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft); letter-spacing:0.5px; margin-top:14px;}
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .panel{position:relative; background:linear-gradient(160deg, rgba(31,19,32,0.7), rgba(20,10,20,0.5)); border:1px solid var(--panel-border); border-radius:14px; padding:22px 24px; backdrop-filter:blur(8px);}
+  .panel-h{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:1.6px; color:var(--gold-3); text-transform:uppercase; font-weight:700; margin-bottom:6px;}
+  .stat{font-family:'Cormorant Garamond',serif; font-size:58px; line-height:1; font-weight:600; margin-top:4px;}
+  .stat.gold{color:var(--gold-3); text-shadow:0 0 26px var(--gold-glow);}
+  .stat.green{color:var(--success); text-shadow:0 0 26px rgba(110,193,138,0.32);}
+  .stat.amber{color:var(--gold-4); text-shadow:0 0 26px var(--gold-glow);}
+  .stat-sub{font-size:11.5px; color:var(--cream-dim); margin-top:11px; font-family:'JetBrains Mono',monospace; letter-spacing:0.4px;}
+  .chart-svg{width:100%; height:auto; display:block; overflow:visible;}
+  .axis-line{stroke:rgba(212,176,106,0.10);}
+  .axis-text{fill:var(--cream-dim); font-family:'JetBrains Mono',monospace; font-size:13px;}
+  .axis-text-y{fill:var(--ink-soft); font-family:'JetBrains Mono',monospace; font-size:12px;}
+  .bar-value{font-family:'Cormorant Garamond',serif; font-weight:600;}
+  .lb-row{display:grid; grid-template-columns:30px 1fr 90px 110px; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid rgba(212,176,106,0.08);}
+  .lb-row:last-child{border-bottom:none;}
+  .lb-rank{font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--ink-soft); text-align:center;}
+  .lb-rank.r1{color:var(--gold-4);} .lb-rank.r2{color:var(--gold-3);} .lb-rank.r3{color:var(--gold-2);}
+  .lb-name{font-size:13px; font-weight:600; color:var(--cream); line-height:1.2;}
+  .lb-loc{font-size:10.5px; color:var(--ink-soft); font-family:'JetBrains Mono',monospace; margin-top:2px;}
+  .lb-bar{height:7px; background:rgba(212,176,106,0.08); border-radius:4px; overflow:hidden;}
+  .lb-bar>div{height:100%; background:linear-gradient(90deg,var(--gold-2),var(--gold-3)); border-radius:4px; box-shadow:0 0 8px var(--gold-glow);}
+  .lb-units{text-align:right; font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--gold-3); font-weight:600;}
+  .lb-units small{display:block; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--ink-soft); letter-spacing:1px; text-transform:uppercase; font-weight:600;}
+  .note{padding:15px 19px; background:rgba(212,176,106,0.08); border-left:3px solid var(--gold-3); border-radius:6px;}
+  .note .h{font-size:10px; letter-spacing:1.8px; color:var(--gold-3); text-transform:uppercase; font-weight:700; font-family:'JetBrains Mono',monospace;}
+  .note p{margin-top:8px; font-size:12.5px; color:var(--cream-dim); line-height:1.62;}
+  .sec{margin-top:30px;}
+  .sec-title{font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--cream); margin-bottom:4px;}
+  .takeaway{display:flex; gap:12px; align-items:flex-start; padding:11px 0; border-bottom:1px solid rgba(212,176,106,0.08); font-size:14px; line-height:1.55; color:var(--cream-dim);}
+  .takeaway:last-child{border-bottom:none;}
+  .takeaway b{color:var(--cream);}
+  .takeaway .mark{color:var(--gold-3); font-size:17px; line-height:1.3;}
+  .foot{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-soft); letter-spacing:0.5px;}
+  @media print{ body{background:#0a0508; -webkit-print-color-adjust:exact; print-color-adjust:exact;} .wrap{padding:32px 40px;} .page-break{break-before:page;} }
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="wrap">
+
+  <div class="brand">
+    <img src="assets/vosges-wordmark.png" alt="Vosges Haut-Chocolat">
+    <span class="x">×</span>
+    <span class="mrg">Marshall Retail Group · WH Smith</span>
+  </div>
+
+  <div style="margin-top:30px;">
+    <div class="eyebrow">▸ Historical Sales · Year-over-Year ◂</div>
+    <h1>Historical Sales.<br>WH&nbsp;Smith / Marshall Retail Group.</h1>
+    <div class="rule"></div>
+    <p class="subhead">Net product sales to WH&nbsp;Smith / MRG (travel-retail, North America), May&nbsp;2025 through May&nbsp;2026. The trailing twelve months booked <strong style="color:var(--cream)">$86,854</strong> across <strong style="color:var(--cream)">261 orders</strong>. On a like-for-like basis — the eight months (Oct–May) for which we have data in both years — net sales are <strong style="color:var(--success)">up 32.8%</strong> year over year.</p>
+    <div class="meta">Source: Fishbowl · customer #74 · net = order subtotal (excl. freight &amp; tax) · prepared by MBACIO · 23 Jun 2026</div>
+  </div>
+
+  <div class="grid-3" style="margin-top:30px;">
+    <div class="panel"><div class="panel-h">Trailing 12 Mo · Net Sales</div><div class="stat gold">$86,854</div><div class="stat-sub">Jun 2025 – May ’26 · 261 orders</div></div>
+    <div class="panel"><div class="panel-h">Like-for-Like Growth · YoY</div><div class="stat green">+32.8%</div><div class="stat-sub">Oct–May ’26 vs Oct–May ’25 · same 8 mo</div></div>
+    <div class="panel"><div class="panel-h">Prior Year · Net Sales</div><div class="stat amber">$53,646</div><div class="stat-sub">Oct 2024 – May ’25 · 189 orders · partial*</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="panel"><div class="panel-h">Monthly Net Sales · May ’25 → May ’26</div><div id="chart-sales-trend"></div></div>
+  </div>
+
+  <div class="grid-2 sec">
+    <div class="panel"><div class="panel-h">Net Sales by SKU · This Year vs Prior</div><div id="sales-sku"></div></div>
+    <div class="panel"><div class="panel-h">Top 10 Locations by Sales · Trailing 12 Mo</div><div id="sales-top-stores"></div></div>
+  </div>
+
+  <div class="sec page-break">
+    <div class="eyebrow">What the numbers say</div>
+    <div class="sec-title" style="margin-top:6px;">Five takeaways.</div>
+    <div class="rule"></div>
+    <div style="margin-top:6px;">
+      <div class="takeaway"><span class="mark">01</span><div><b>Underlying growth is real, not just a longer window.</b> Comparing the identical Oct–May period in both years (8 months vs 8 months), net sales rose <b style="color:var(--success)">+32.8%</b> and order count <b>+9.0%</b> — the account is buying both more often and bigger.</div></div>
+      <div class="takeaway"><span class="mark">02</span><div><b>March ’26 was the standout month — $18,886</b> across 58 orders, roughly triple a typical month. It coincides with the large MRG onboarding wave seen in the distribution analysis.</div></div>
+      <div class="takeaway"><span class="mark">03</span><div><b>Two new SKUs added $18.3K with no prior-year base</b> — the <b>Red Hawaiian Salt Caramel 6PC</b> ($10,710) and <b>Maison Truffle 4PC</b> ($7,560). Both carry premium ASP and are pure incremental revenue.</div></div>
+      <div class="takeaway"><span class="mark">04</span><div><b>The core bar lineup is all up double-digits.</b> Pink Himalayan, Matcha, Coconut&nbsp;&amp;&nbsp;Banana, Barcelona and Bacon each grew year over year — the catalog is deepening, not just churning.</div></div>
+      <div class="takeaway"><span class="mark">05</span><div><b>Revenue stays well diversified across doors.</b> The top location (Shorepoints–EWR) is just ~$4.9K of $86.9K; growth is broad-based across airport markets (EWR, SFO, SEA-TAC, BWI, DEN, ORD).</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="note">
+      <div class="h">* Basis &amp; data note</div>
+      <p>Net sales = order subtotal (product revenue, excluding freight &amp; tax), sourced from Fishbowl for WH&nbsp;Smith / MRG (customer #74), excluding voided/canceled orders. WH&nbsp;Smith order history in Fishbowl begins <strong>3&nbsp;Oct&nbsp;2024</strong>, so the prior fiscal year is a partial eight months. To keep the comparison honest, the headline year-over-year figure compares only the <strong>identical Oct–May window</strong> present in both years (8 mo vs 8 mo) — not a full year against a partial one. A raw full-period total would overstate growth and is not used here.</p>
+    </div>
+  </div>
+
+  <div class="foot"><span>VOSGES HAUT-CHOCOLAT × MARSHALL RETAIL GROUP</span><span>PREPARED BY MBACIO · 23 JUN 2026</span></div>
+</div>
+
+<script>
+const SALES_HIST = {"spine": [{"lbl": "May '25", "net": 7076.16, "orders": 26}, {"lbl": "Jun '25", "net": 3386.88, "orders": 13}, {"lbl": "Jul '25", "net": 4233.6, "orders": 16}, {"lbl": "Aug '25", "net": 4536.0, "orders": 17}, {"lbl": "Sep '25", "net": 3447.36, "orders": 9}, {"lbl": "Oct '25", "net": 10523.52, "orders": 34}, {"lbl": "Nov '25", "net": 3991.68, "orders": 13}, {"lbl": "Dec '25", "net": 9530.88, "orders": 21}, {"lbl": "Jan '26", "net": 3996.0, "orders": 13}, {"lbl": "Feb '26", "net": 6454.56, "orders": 20}, {"lbl": "Mar '26", "net": 18885.84, "orders": 58}, {"lbl": "Apr '26", "net": 7072.56, "orders": 19}, {"lbl": "May '26", "net": 10795.44, "orders": 28}], "skus": [{"label": "Pink Himalayan Crystal Salt", "cur": 17660.16, "pri": 16873.92}, {"label": "Matcha Green Tea Chocolate", "cur": 15785.28, "pri": 13245.12}, {"label": "Coconut & Banana Super Dark", "cur": 14757.12, "pri": 11188.8}, {"label": "Red Hawaiian Salt Caramel 6PC", "cur": 10710.0, "pri": 0.0}, {"label": "Barcelona Exotic Chocolate", "cur": 10402.56, "pri": 6652.8}, {"label": "Bacon Exotic Chocolate Bar", "cur": 9979.2, "pri": 5685.12}, {"label": "Vosges Maison Truffle 4PC", "cur": 7560.0, "pri": 0.0}], "stores": [{"name": "SHOREPOINTS MARKET-EWR AIRPORT (T1) (NJ)", "cur": 4912.32, "pri": 1330.56, "orders": 7}, {"name": "DISTRICT MARKET-SFO AP (CA)", "cur": 4496.16, "pri": 1572.48, "orders": 9}, {"name": "NATALIES CANDY AT SEA-TAC  AP (WA)", "cur": 3681.6, "pri": 1028.16, "orders": 8}, {"name": "SILICON VALLEY NEWS-SFO AP (CA)", "cur": 2880.96, "pri": 1330.56, "orders": 6}, {"name": "DISTRICT MARKET-BWI AIRPORT (NJ)", "cur": 2782.56, "pri": 241.92, "orders": 7}, {"name": "THE ARTS DISTRICT MARKET - SAN (CA)", "cur": 2661.12, "pri": 0.0, "orders": 5}, {"name": "FLIGHT STOP-DEN AIRPORT (GATE 33 &  55) (CO)", "cur": 2607.84, "pri": 0.0, "orders": 6}, {"name": "SIX POINTS MARKET-ORD AP (IL)", "cur": 2388.0, "pri": 725.76, "orders": 5}, {"name": "DISTRICT MARKET-IAD AIRPORT (VA)", "cur": 2304.0, "pri": 483.84, "orders": 6}, {"name": "INMOTION-LAS AIRPORT (NV)", "cur": 2150.4, "pri": 967.68, "orders": 5}]};
+
+(function(){
+  (function salesTrend(){
+    const xs = SALES_HIST.spine.map(s=>s.lbl), data = SALES_HIST.spine.map(s=>s.net);
+    const w=1100,h=360,m={top:44,right:24,bottom:58,left:86};
+    const root=d3.select('#chart-sales-trend').append('svg').attr('class','chart-svg').attr('viewBox',`0 0 ${w} ${h}`);
+    const x=d3.scaleBand().domain(xs).range([m.left,w-m.right]).padding(0.32);
+    const mx=d3.max(data),y=d3.scaleLinear().domain([0,mx*1.2]).range([h-m.bottom,m.top]);
+    const defs=root.append('defs');const g=defs.append('linearGradient').attr('id','b-sh').attr('x1','0').attr('x2','0').attr('y1','0').attr('y2','1');
+    g.append('stop').attr('offset','0%').attr('stop-color','#d4b06a').attr('stop-opacity',0.95);
+    g.append('stop').attr('offset','100%').attr('stop-color','#d4b06a').attr('stop-opacity',0.45);
+    [0,0.5,1].forEach(f=>{const yy=m.top+(h-m.top-m.bottom)*(1-f);
+      root.append('line').attr('class','axis-line').attr('x1',m.left).attr('x2',w-m.right).attr('y1',yy).attr('y2',yy);
+      root.append('text').attr('class','axis-text-y').attr('x',m.left-12).attr('y',yy+4).attr('text-anchor','end').text('$'+Math.round(mx*f).toLocaleString());});
+    data.forEach((d,i)=>{const bx=x(xs[i]),bw=x.bandwidth(),by=y(d),bh=(h-m.bottom)-by;
+      root.append('rect').attr('x',bx).attr('y',by).attr('width',bw).attr('height',bh).attr('fill','url(#b-sh)').attr('rx',4).style('filter','drop-shadow(0 0 6px #d4b06a55)');
+      root.append('text').attr('class','axis-text').attr('x',bx+bw/2).attr('y',h-m.bottom+26).attr('text-anchor','middle').style('font-size','12px').text(xs[i]);
+      root.append('text').attr('class','bar-value').attr('x',bx+bw/2).attr('y',by-9).attr('text-anchor','middle').style('font-size','12px').style('fill','#d4b06a').text('$'+(Math.round(d/100)/10).toFixed(1)+'k');});
+  })();
+  (function salesSku(){
+    const maxRev=Math.max(...SALES_HIST.skus.map(s=>Math.max(s.cur,s.pri)));
+    document.getElementById('sales-sku').innerHTML=SALES_HIST.skus.map(s=>{
+      const cw=(s.cur/maxRev*100).toFixed(1),pw=(s.pri/maxRev*100).toFixed(1),isNew=s.pri===0;
+      const delta=isNew?'NEW':(s.cur>=s.pri?'+':'')+Math.round((s.cur-s.pri)/s.pri*100)+'%';
+      const dc=isNew?'var(--gold-4)':(s.cur>=s.pri?'var(--success)':'var(--danger)');
+      return `<div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;font-size:12.5px;">
+          <span style="font-weight:600;color:var(--cream);">${s.label}</span>
+          <span><span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:${dc};font-weight:600;margin-right:9px;">${delta}</span><span style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-3);font-weight:600;">$${Math.round(s.cur).toLocaleString()}</span></span>
+        </div>
+        <div style="position:relative;height:8px;background:rgba(212,176,106,0.08);border-radius:4px;">
+          <div style="height:100%;width:${cw}%;background:linear-gradient(90deg,var(--gold-2),var(--gold-3));border-radius:4px;box-shadow:0 0 8px var(--gold-glow);"></div>
+          ${isNew?'':`<div title="Prior year" style="position:absolute;top:-3px;left:${pw}%;width:2px;height:14px;background:var(--cream-dim);opacity:0.85;"></div>`}
+        </div>
+        <div style="text-align:right;margin-top:3px;font-size:10px;color:var(--ink-soft);font-family:'JetBrains Mono',monospace;">${isNew?'no prior-year sales':'prior yr $'+Math.round(s.pri).toLocaleString()+' ┃ marker'}</div>
+      </div>`;}).join('');
+  })();
+  (function salesStores(){
+    const top=SALES_HIST.stores,maxCur=Math.max(...top.map(t=>t.cur));
+    document.getElementById('sales-top-stores').innerHTML=top.map((t,i)=>{
+      const wp=(t.cur/maxCur*100).toFixed(1),rc=i===0?'r1':i===1?'r2':i===2?'r3':'rn',isNew=t.pri===0;
+      const delta=isNew?'NEW':(t.cur>=t.pri?'+':'')+Math.round((t.cur-t.pri)/t.pri*100)+'%';
+      const dc=isNew?'var(--gold-4)':(t.cur>=t.pri?'var(--success)':'var(--danger)');
+      const nm=t.name.replace(/\s*\([A-Z]{2}\)\s*$/,''),st=(t.name.match(/\(([A-Z]{2})\)\s*$/)||[])[1]||'';
+      return `<div class="lb-row"><div class="lb-rank ${rc}">${i+1}</div>
+        <div><div class="lb-name">${nm}</div><div class="lb-loc">${st} · ${t.orders} orders · <span style="color:${dc};font-weight:600">${delta} YoY</span></div></div>
+        <div class="lb-bar"><div style="width:${wp}%"></div></div>
+        <div class="lb-units">$${Math.round(t.cur).toLocaleString()}<small>net sales</small></div></div>`;}).join('');
+  })();
+})();
+</script>
+</body>
+</html>
